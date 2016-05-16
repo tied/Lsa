@@ -1,0 +1,290 @@
+{
+	"connectionDriverName": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
+	"mappingDbJiraFld": 
+	[
+		{
+			"name": "CfldExtDbGridResTp1",
+			"tableName": "resTp1",
+			"type": "Table",
+			"desc": "Информационные системы",
+			"inParameters": [{
+				"par" : "ResourceType",
+				"val" : "1"
+			},
+			{
+				"par" : "issueTask"
+			}],
+			"dBSchemaName": "dbo",
+			"dBQuery": "select MAIN.ID as ID, MAIN.Structural_code as CD_STR, A1.Name as NAME1, A2.Name as NAME2, A3.Name as NAME3, MAIN.Сomment as COMM, STS.Name as STS FROM jira_tab_resources_issue MAIN INNER JOIN jira_tab_statusaccess STS ON MAIN.ID_Status = STS.ID LEFT JOIN jira_tab_resources A1 ON substring(MAIN.Structural_code, 1, 10) = substring(A1.Structural_code, 1, 10) AND len(A1.Structural_code) = 10 AND A1.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A2 ON substring(MAIN.Structural_code, 1, 21) = substring(A2.Structural_code, 1, 21) AND len(A2.Structural_code) = 21 AND A2.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A3 ON substring(MAIN.Structural_code, 1, 32) = substring(A3.Structural_code, 1, 32) AND len(A3.Structural_code) = 32 AND A3.ResourceType = <ResourceType> WHERE NOT (A1.NAME IS NULL AND A2.NAME IS NULL AND A3.NAME IS NULL)",
+			"dBQueryWhereConditions": [
+			{
+				"fldExpr": "issueTask",
+				"where": " AND MAIN.ID_Issue = <issueTask> AND MAIN.ID_Subtask IS NULL"
+			},
+			{
+				"fldExpr": "issueSubTask",
+				"where": " AND MAIN.ID_Subtask = <issueSubTask>"
+			}			
+			],
+			"mapDbFields": [
+			{
+				"fldName": "ID",
+				"fldLabel": "ИД",
+				"order": 0,
+				"fldJavaType": "Long",
+				"isVisible": "0"
+			},
+			{
+				"fldName": "CD_STR",
+				"fldLabel": "Структурный код ресурса",
+				"order": 10,
+				"fldJavaType": "String",
+				"isVisible": "0"
+			},			
+			{
+				"fldName": "NAME1",
+				"fldLabel": "Ресурс",
+				"order": 20,
+				"fldJavaType": "String",
+				"isVisible": "1"
+			}, {
+				"fldName": "NAME2",
+				"fldLabel": "Модуль",
+				"order": 30,
+				"fldJavaType": "String",
+				"isVisible": "1"
+			}, {
+				"fldName": "NAME3",
+				"fldLabel": "Функция",
+				"order": 40,
+				"fldJavaType": "String",
+				"isVisible": "1"
+			}, {
+				"fldName": "COMM",
+				"fldLabel": "Комментарий",
+				"order": 50,
+				"fldJavaType": "String",
+				"isVisible": "1"
+			}, {
+				"fldName": "STS",
+				"fldLabel": "Статус",
+				"order": 60,
+				"fldJavaType": "String",
+				"isVisible": "1"
+			}]
+		},
+		{
+			"name": "CfldExtDbGridResTp2",
+			"tableName": "resTp2",
+			"type": "Table",
+			"desc": "Оборудование",
+			"inParameters": [{
+				"par" : "ResourceType",
+				"val" : "2"
+			},
+			{
+				"par" : "issueTask"
+			}],
+			"dBSchemaName": "dbo",
+			"dBQuery": "select MAIN.ID as ID, MAIN.Structural_code as CD_STR, A1.Name as NAME1, A2.Name as NAME2, A3.Name as NAME3, MAIN.Сomment as COMM, STS.Name as STS FROM jira_tab_resources_issue MAIN INNER JOIN jira_tab_statusaccess STS ON MAIN.ID_Status = STS.ID LEFT JOIN jira_tab_resources A1 ON substring(MAIN.Structural_code, 1, 10) = substring(A1.Structural_code, 1, 10) AND len(A1.Structural_code) = 10 AND A1.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A2 ON substring(MAIN.Structural_code, 1, 21) = substring(A2.Structural_code, 1, 21) AND len(A2.Structural_code) = 21 AND A2.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A3 ON substring(MAIN.Structural_code, 1, 32) = substring(A3.Structural_code, 1, 32) AND len(A3.Structural_code) = 32 AND A3.ResourceType = <ResourceType> WHERE NOT (A1.NAME IS NULL AND A2.NAME IS NULL AND A3.NAME IS NULL)",
+			"dBQueryWhereConditions": [
+			{
+				"fldExpr": "issueTask",
+				"where": " AND MAIN.ID_Issue = <issueTask> AND MAIN.ID_Subtask IS NULL"
+			},
+			{
+				"fldExpr": "issueSubTask",
+				"where": " AND MAIN.ID_Subtask = <issueSubTask>"
+			}			
+			],
+			"mapDbFields": [
+			{
+				"fldName": "ID",
+				"fldLabel": "ИД",
+				"order": 0,
+				"fldJavaType": "Long",
+				"isVisible": "0"
+			},
+			{
+				"fldName": "CD_STR",
+				"fldLabel": "Структурный код ресурса",
+				"order": 10,
+				"fldJavaType": "String",
+				"isVisible": "0"
+			},				
+			{
+				"fldName": "NAME1",
+				"fldLabel": "Ресурс",
+				"order": 20,
+				"fldJavaType": "String",
+				"isVisible": "1"
+			}, {
+				"fldName": "NAME2",
+				"fldLabel": "Модуль",
+				"order": 30,
+				"fldJavaType": "String",
+				"isVisible": "1"
+			}, {
+				"fldName": "NAME3",
+				"fldLabel": "Функция",
+				"order": 40,
+				"fldJavaType": "String",
+				"isVisible": "1"
+			}, {
+				"fldName": "COMM",
+				"fldLabel": "Комментарий",
+				"order": 50,
+				"fldJavaType": "String",
+				"isVisible": "1"
+			}, {
+				"fldName": "STS",
+				"fldLabel": "Статус",
+				"order": 60,
+				"fldJavaType": "String",
+				"isVisible": "1"
+			}]
+		},
+		{
+			"name": "CfldExtDbGridResTp3",
+			"tableName": "resTp3",
+			"type": "Table",
+			"desc": "Дополнительные функции",
+			"inParameters": [{
+				"par" : "ResourceType",
+				"val" : "3"
+			},
+			{
+				"par" : "issueTask"
+			}],
+			"dBSchemaName": "dbo",
+			"dBQuery": "select MAIN.ID as ID, MAIN.Structural_code as CD_STR, A1.Name as NAME1, A2.Name as NAME2, A3.Name as NAME3, MAIN.Сomment as COMM, STS.Name as STS FROM jira_tab_resources_issue MAIN INNER JOIN jira_tab_statusaccess STS ON MAIN.ID_Status = STS.ID LEFT JOIN jira_tab_resources A1 ON substring(MAIN.Structural_code, 1, 10) = substring(A1.Structural_code, 1, 10) AND len(A1.Structural_code) = 10 AND A1.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A2 ON substring(MAIN.Structural_code, 1, 21) = substring(A2.Structural_code, 1, 21) AND len(A2.Structural_code) = 21 AND A2.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A3 ON substring(MAIN.Structural_code, 1, 32) = substring(A3.Structural_code, 1, 32) AND len(A3.Structural_code) = 32 AND A3.ResourceType = <ResourceType> WHERE NOT (A1.NAME IS NULL AND A2.NAME IS NULL AND A3.NAME IS NULL)",
+			"dBQueryWhereConditions": [
+			{
+				"fldExpr": "issueTask",
+				"where": " AND MAIN.ID_Issue = <issueTask> AND MAIN.ID_Subtask IS NULL"
+			},
+			{
+				"fldExpr": "issueSubTask",
+				"where": " AND MAIN.ID_Subtask = <issueSubTask>"
+			}			
+			],
+			"mapDbFields": [
+			{
+				"fldName": "ID",
+				"fldLabel": "ИД",
+				"order": 0,
+				"fldJavaType": "Long",
+				"isVisible": "0"
+			},
+			{
+				"fldName": "CD_STR",
+				"fldLabel": "Структурный код ресурса",
+				"order": 10,
+				"fldJavaType": "String",
+				"isVisible": "0"
+			},				
+			{
+				"fldName": "NAME1",
+				"fldLabel": "Ресурс",
+				"order": 20,
+				"fldJavaType": "String",
+				"isVisible": "1"
+			}, {
+				"fldName": "NAME2",
+				"fldLabel": "Модуль",
+				"order": 30,
+				"fldJavaType": "String",
+				"isVisible": "1"
+			}, {
+				"fldName": "NAME3",
+				"fldLabel": "Функция",
+				"order": 40,
+				"fldJavaType": "String",
+				"isVisible": "1"
+			}, {
+				"fldName": "COMM",
+				"fldLabel": "Комментарий",
+				"order": 50,
+				"fldJavaType": "String",
+				"isVisible": "1"
+			}, {
+				"fldName": "STS",
+				"fldLabel": "Статус",
+				"order": 60,
+				"fldJavaType": "String",
+				"isVisible": "1"
+			}]
+		},
+		{
+			"name": "CfldExtDbGridResTp4",
+			"tableName": "resTp4",
+			"type": "Table",
+			"desc": "Доступ к витрине",
+			"inParameters": [{
+				"par" : "ResourceType",
+				"val" : "4"
+			},
+			{
+				"par" : "issueTask"
+			}],
+			"dBSchemaName": "dbo",
+			"dBQuery": "select MAIN.ID as ID, MAIN.Structural_code as CD_STR, A1.Name as NAME1, A2.Name as NAME2, A3.Name as NAME3, MAIN.Сomment as COMM, STS.Name as STS FROM jira_tab_resources_issue MAIN INNER JOIN jira_tab_statusaccess STS ON MAIN.ID_Status = STS.ID LEFT JOIN jira_tab_resources A1 ON substring(MAIN.Structural_code, 1, 10) = substring(A1.Structural_code, 1, 10) AND len(A1.Structural_code) = 10 AND A1.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A2 ON substring(MAIN.Structural_code, 1, 21) = substring(A2.Structural_code, 1, 21) AND len(A2.Structural_code) = 21 AND A2.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A3 ON substring(MAIN.Structural_code, 1, 32) = substring(A3.Structural_code, 1, 32) AND len(A3.Structural_code) = 32 AND A3.ResourceType = <ResourceType> WHERE NOT (A1.NAME IS NULL AND A2.NAME IS NULL AND A3.NAME IS NULL)",
+			"dBQueryWhereConditions": [
+			{
+				"fldExpr": "issueTask",
+				"where": " AND MAIN.ID_Issue = <issueTask> AND MAIN.ID_Subtask IS NULL"
+			},
+			{
+				"fldExpr": "issueSubTask",
+				"where": " AND MAIN.ID_Subtask = <issueSubTask>"
+			}			
+			],
+			"mapDbFields": [
+			{
+				"fldName": "ID",
+				"fldLabel": "ИД",
+				"order": 0,
+				"fldJavaType": "Long",
+				"isVisible": "0"
+			},
+			{
+				"fldName": "CD_STR",
+				"fldLabel": "Структурный код ресурса",
+				"order": 10,
+				"fldJavaType": "String",
+				"isVisible": "0"
+			},				
+			{
+				"fldName": "NAME1",
+				"fldLabel": "Ресурс",
+				"order": 20,
+				"fldJavaType": "String",
+				"isVisible": "1"
+			}, {
+				"fldName": "NAME2",
+				"fldLabel": "Модуль",
+				"order": 30,
+				"fldJavaType": "String",
+				"isVisible": "1"
+			}, {
+				"fldName": "NAME3",
+				"fldLabel": "Функция",
+				"order": 40,
+				"fldJavaType": "String",
+				"isVisible": "1"
+			}, {
+				"fldName": "COMM",
+				"fldLabel": "Комментарий",
+				"order": 50,
+				"fldJavaType": "String",
+				"isVisible": "1"
+			}, {
+				"fldName": "STS",
+				"fldLabel": "Статус",
+				"order": 60,
+				"fldJavaType": "String",
+				"isVisible": "1"
+			}]
+		}		
+	]
+}

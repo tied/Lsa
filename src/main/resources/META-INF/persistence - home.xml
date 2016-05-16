@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence persistence_2_1.xsd"
+  version="2.1">
+	<persistence-unit name="LSASystem" transaction-type="RESOURCE_LOCAL">
+		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
+		<class>com.itzabota.jira.plugins.servye.lsa.db.model.Employee</class>
+		<class>com.itzabota.jira.plugins.servye.lsa.db.model.ResourceIssue</class>
+		<class>com.itzabota.jira.plugins.servye.lsa.db.model.AccessApprove</class>
+		
+		<class>com.itzabota.jira.plugins.servye.lsa.db.model.Profile</class>
+		<class>com.itzabota.jira.plugins.servye.lsa.db.model.Resource</class>
+		
+		<class>com.itzabota.jira.plugins.servye.lsa.db.model.ResourceProfile</class>
+		<class>com.itzabota.jira.plugins.servye.lsa.db.model.AccessStatus</class>
+		<class>com.itzabota.jira.plugins.servye.lsa.db.model.AccessHistory</class>
+		
+		<properties>
+			<!--property name="openjpa.jdbc.SynchronizeMappings" 
+					 value="buildSchema(ForeignKeys=true)"/-->	
+			<!--property name="openjpa.ConnectionProperties" 
+			value="DriverClassName=com.microsoft.sqlserver.jdbc.SQLServerDriver,Url=jdbc:sqlserver://R13131:1433;instanceName=SQLEXPRESS;databaseName=ru1sw242.ForJira;selectMethod=cursor;sendStringParametersAsUnicode=false, 
+			  MaxActive=100, 
+			  MaxWait=10000, 
+			  TestOnBorrow=true"/-->
+			<!--property name="openjpa.ConnectionURL" value="jdbc:mysql://localhost:4306/ru1sw242?useUnicode=true&amp;characterEncoding=utf8"/-->			  
+			<property name="openjpa.ConnectionDriverName" value="com.mysql.jdbc.Driver"/>			
+			<property name="openjpa.ConnectionURL" value="jdbc:mysql://localhost:3306/dbo?useUnicode=true&amp;characterEncoding=utf8"/>			  
+			<property name="openjpa.ConnectionUserName" value="shareAppUser"/>
+			<property name="openjpa.ConnectionPassword" value="Vit7_MySQL"/>	
+			<property name="openjpa.DynamicEnhancementAgent" value="true"/>
+			<property name="openjpa.RuntimeUnenhancedClasses" value="supported"/>		
+			<property name="openjpa.ConnectionDriverName" value="com.mysql.jdbc.Driver"/>
+			<!--property name="openjpa.jdbc.Schema" 
+			value="dbo"/-->
+			<property name="openjpa.jdbc.Schema" value="dbo"/>
+			<property name="openjpa.Log" value="DefaultLevel=WARN, Runtime=INFO, Tool=INFO, SQL=TRACE"/>
+			<property name="openjpa.ConnectionFactoryProperties" value="PrettyPrint=true, PrettyPrintLineLength=72, PrintParameters=true, MaxActive=10, MaxIdle=5, MinIdle=2, MaxWait=60000, autoReconnect=true"/>		
+		</properties>	
+	 </persistence-unit>
+</persistence>

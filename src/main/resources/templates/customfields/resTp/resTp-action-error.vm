@@ -1,0 +1,8 @@
+<html>
+  <head>
+	<meta name="decorator" content="atl.general">
+  </head>
+  <body>
+	<p>Ошибка открытия страницы редактирования ресурсов заявки!</p>
+  </body>
+</html>

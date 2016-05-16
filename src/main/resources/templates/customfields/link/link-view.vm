@@ -1,0 +1,6 @@
+$webResourceManager.requireResource("com.itzabota.jira.plugins.servye.lsa:auiBase")
+#if ($value)
+<a id="linkURLLabel" class="aui-label" href="${linkUrl}">${linkTitle}</a>
+#else
+<a id="linkURLLabel" class="aui-label" href="${linkUrl}">${linkTitle}</a>
+#end

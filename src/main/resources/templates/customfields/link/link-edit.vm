@@ -1,0 +1,8 @@
+$webResourceManager.requireResource("com.itzabota.jira.plugins.servye.lsa:auiBase")
+#customControlHeader ($action $customField.id $customField.name $fieldLayoutItem.required $displayParameters $auiparams)
+#if ($value)
+<a id="linkURLLabel" class="aui-label" href="${linkUrl}">${linkTitle}</a>
+#else
+<a id="linkURLLabel" class="aui-label" href="${linkUrl}">${linkTitle}</a>
+#end
+#customControlFooter ($action $customField.id $fieldLayoutItem.fieldDescription $displayParameters $auiparams)

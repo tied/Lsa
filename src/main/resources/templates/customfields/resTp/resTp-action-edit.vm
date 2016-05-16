@@ -1,0 +1,505 @@
+<html>
+  <head>
+	<!--meta name="decorator" content="atl.general"-->
+	
+	$webResourceManager.requireResource("com.itzabota.jira.plugins.servye.lsa:auiBase")				$webResourceManager.requireResource("com.itzabota.jira.plugins.servye.lsa:lsa-resources")
+	$webResourceManager.requireResource("com.itzabota.jira.plugins.servye.lsa:cfldGrid")
+	$webResourceManager.requireResource("com.itzabota.jira.plugins.servye.lsa:resTpVocabulary")
+	$webResourceManager.requireResource("com.itzabota.jira.plugins.servye.lsa:resTp")
+	
+  </head>
+  <body>
+  <header class="aui-page-header"><div class="entity-header"><label id="issueName"></label></div>
+  </header>
+	<div class="entity-main">
+		<div class="aui-page-panel">	
+			<div class="aui-page-panel-nav">
+			   <nav class="aui-navgroup aui-navgroup-vertical">
+					<div class="aui-navgroup-inner">
+						<div class="aui-nav-heading"><strong>Базовые</strong></div>
+						<ul class="aui-nav">
+							<li class="aui-nav-selected">
+								<div id="idLink-resTp" class="entity-item-active"><a class="hrefEntity" href="#">Типы ресурсов</a></div>								
+							</li>
+						</ul>
+					</div>
+				</nav>										
+			</div>		
+			<div class="aui-page-panel-content">
+				<div class="entity-header-items"><label id="label-entity-header-items-name">Ресурсы заявки</label></div>
+				<div id="profileContainerWarn" class="field-group">	
+					<span class="aui-label"><p>Внимание! Выбор профиля перепишет текущие ресурсы!</p></span>								
+				</div>								
+				<div id="profileContainer" class="field-group">				
+					<label for="headSel-resTpResourceProfileName">Профиль</label>
+					<select id="headSel-resTpResourceProfileName">				
+					</select>									
+				</div>						
+				<div id="groupActionsBtn" class="aui-buttons">
+					<button id="btnAddRecord" class="aui-button mainPnlBtns" title="Добавить запись">
+						<span class="aui-icon aui-icon-small aui-iconfont-add">Add</span>
+					</button>					             
+				</div>	
+                <!-- Render the dialog -->    
+                <section role="dialog" id="dialog-form-valid" class="aui-layer aui-dialog2 aui-dialog2-warning" aria-hidden="true">
+                    <!-- Dialog header -->
+                    <header class="aui-dialog2-header">
+                        <!-- The dialog's title -->
+                        <h2 class="aui-dialog2-header-main">Ошибка валидации формы</h2>
+                        <!-- Close icon -->
+                        <a class="aui-dialog2-header-close">
+                            <span class="aui-icon aui-icon-small aui-iconfont-close-dialog">Close</span>
+                        </a>
+                    </header>
+                    <!-- Main dialog content -->
+                    <div class="aui-dialog2-content">
+                        <p>Ошибки:</p>
+						<label id="dialog-form-valid-errors"></label>
+                    </div>
+                    <!-- Dialog footer -->
+                    <footer class="aui-dialog2-footer">
+                        <!-- Actions to render on the right of the footer -->
+                        <div class="aui-dialog2-footer-actions">
+                            <button id="dialog-form-valid-close-button" class="aui-button aui-button-link">Close</button>
+                        </div>
+                        <!-- Hint text is rendered on the left of the footer -->
+                    </footer>
+                </section>					
+				<!--Информационные системы. Форма-->
+				<section role="dialog" id="insert-dialog-resTp1" class="aui-layer aui-dialog2 aui-dialog2-large" aria-hidden="true">
+					<!-- dialog2 header -->
+					<header class="aui-dialog2-header">
+						<!-- The dialog2's title -->
+						<h2 class="aui-dialog2-header-main">Добавление/редактирование информационных систем</h2>
+						<!-- Close icon -->
+						<a class="aui-dialog2-header-close">
+							<span class="aui-icon aui-icon-small aui-iconfont-close-dialog">Close</span>
+						</a>
+					</header>					
+					<!-- Main dialog2 content -->
+					<div class="aui-dialog2-content">
+						<form action="#" method="post" id="resTp1Form" class="aui">
+							<fieldset>
+								<div class="field-group status">
+									<label for="resTp1Id">ИД</label>
+									<input class="text" type="text" id="resTp1Id" name="id" title="ИД" maxlength="255">																
+								</div>	
+								<div class="field-group status">
+									<label for="resTp1Name">Наименование</label>
+									<input class="text" type="text" id="resTp1Name" name="name" title="Наименование" maxlength="1000">								
+								</div>								
+								<div class="field-group status">
+									<label for="resTp1СdStr">Структурный код</label>
+									<input class="text" type="text" id="resTp1СdStr" name="сdStr" title="Структурный код" maxlength="1000">								
+								</div>
+								<div class="field-group">
+									<label for="resTp1Resource1Name">Ресурс</label>
+									<select class="select" id="resTp1Resource1Name" title="1й уровень ресурса">								
+									</select>	
+								</div>
+								<div class="field-group">
+									<label for="resTp1Modul1Name">Модуль</label>
+									<select class="select" id="resTp1Modul1Name" title="2й уровень ресурса">								
+									</select>	
+								</div>
+								<div class="field-group">
+									<label for="resTp1Function1Name">Функция</label>
+									<select class="select" id="resTp1Function1Name" title="3й уровень ресурса">								
+									</select>								
+								</div>								
+								<div class="field-group">
+									<label for="resTp1Comment">Описание</label>
+									<textarea class="textarea" name="comment" id="resTp1Comment" placeholder="Ваш комментарий здесь..." maxlength="1000">Описание для заявки</textarea>
+								</div>										
+								<div class="field-group status">
+									<label for="resTp1Status">Статус</label>
+									<input class="text" type="text" id="resTp1Status" name="status" title="Статус" maxlength="255">	
+								</div>	
+								<div class="field-group status">
+									<label for="resTp1LoginExpert">Эксперт</label>
+									<input class="text" type="text" id="resTp1LoginExpert" name="loginExpert" title="Эксперт" maxlength="255">	
+								</div>	
+								<div class="field-group status">
+									<label for="resTp1LoginOwner">Владелец</label>
+									<input class="text" type="text" id="resTp1LoginOwner" name="loginOwner" title="Владелец" maxlength="255">	
+								</div>	
+								<div class="field-group status">
+									<label for="resTp1LoginSpecialist">Специалист</label>
+									<input class="text" type="text" id="resTp1LoginSpecialist" name="loginSpecialist" title="Специалист" maxlength="255">	
+								</div>									
+								<div class="field-group status">
+									<label for="resTp1Type">Тип ресурса</label>
+									<input class="text" type="text" id="resTp1Type" name="type" title="Тип ресурса" maxlength="255">	
+								</div>							
+							</fieldset>
+						 </form>   
+					</div>
+					<!-- dialog2 footer -->
+					<footer class="aui-dialog2-footer">
+						<!-- Actions to render on the right of the footer -->
+						<div class="aui-dialog2-footer-actions">
+							<button id="dialog-resTp1-submit-button" class="aui-button aui-button-primary">Сохранить</button>
+							<button id="dialog-resTp1-close-button" class="aui-button aui-button-link">Закрыть</button>
+						</div>								
+					</footer>
+				</section>			
+				<!--Оборудование. Форма-->
+				<section role="dialog" id="insert-dialog-resTp2" class="aui-layer aui-dialog2 aui-dialog2-large" aria-hidden="true">
+					<!-- dialog2 header -->
+					<header class="aui-dialog2-header">
+						<!-- The dialog2's title -->
+						<h2 class="aui-dialog2-header-main">Добавление/редактирование оборудования</h2>
+						<!-- Close icon -->
+						<a class="aui-dialog2-header-close">
+							<span class="aui-icon aui-icon-small aui-iconfont-close-dialog">Close</span>
+						</a>
+					</header>
+					<!-- Main dialog2 content -->
+					<div class="aui-dialog2-content">
+						<form action="#" method="post" id="resTp2Form" class="aui">
+							<fieldset>
+								<div class="field-group status">
+									<label for="resTp2Id">ИД</label>
+									<input class="text" type="text" id="resTp2Id" name="id" title="ИД" maxlength="255">																
+								</div>	
+								<div class="field-group status">
+									<label for="resTp2Name">Наименование</label>
+									<input class="text" type="text" id="resTp2Name" name="name" title="Наименование" maxlength="1000">								
+								</div>								
+								<div class="field-group status">
+									<label for="resTp2СdStr">Структурный код</label>
+									<input class="text" type="text" id="resTp2СdStr" name="сdStr" title="Структурный код" maxlength="1000">								
+								</div>
+								<div class="field-group">
+									<label for="resTp2Resource2Name">Ресурс</label>
+									<select class="select" id="resTp2Resource2Name" title="1й уровень ресурса">								
+									</select>	
+								</div>
+								<div class="field-group">
+									<label for="resTp2Modul2Name">Модуль</label>
+									<select class="select" id="resTp2Modul2Name" title="2й уровень ресурса">								
+									</select>	
+								</div>
+								<div class="field-group">
+									<label for="resTp2Function2Name">Функция</label>
+									<select class="select" id="resTp2Function2Name" title="3й уровень ресурса">								
+									</select>								
+								</div>								
+								<div class="field-group">
+									<label for="resTp2Comment">Описание</label>
+									<textarea class="textarea" name="comment" id="resTp2Comment" placeholder="Ваш комментарий здесь..." maxlength="1000">Описание для заявки</textarea>
+								</div>										
+								<div class="field-group status">
+									<label for="resTp2Status">Статус</label>
+									<input class="text" type="text" id="resTp2Status" name="status" title="Статус" maxlength="255">	
+								</div>	
+								<div class="field-group status">
+									<label for="resTp2LoginExpert">Эксперт</label>
+									<input class="text" type="text" id="resTp2LoginExpert" name="loginExpert" title="Эксперт" maxlength="255">	
+								</div>	
+								<div class="field-group status">
+									<label for="resTp2LoginOwner">Владелец</label>
+									<input class="text" type="text" id="resTp2LoginOwner" name="loginOwner" title="Владелец" maxlength="255">	
+								</div>	
+								<div class="field-group status">
+									<label for="resTp2LoginSpecialist">Специалист</label>
+									<input class="text" type="text" id="resTp2LoginSpecialist" name="loginSpecialist" title="Специалист" maxlength="255">	
+								</div>									
+								<div class="field-group status">
+									<label for="resTp2Type">Тип ресурса</label>
+									<input class="text" type="text" id="resTp2Type" name="type" title="Тип ресурса" maxlength="255">	
+								</div>							
+							</fieldset>
+						 </form>   
+					</div>
+					<!-- dialog2 footer -->
+					<footer class="aui-dialog2-footer">
+						<!-- Actions to render on the right of the footer -->
+						<div class="aui-dialog2-footer-actions">
+							<button id="dialog-resTp2-submit-button" class="aui-button aui-button-primary">Сохранить</button>
+							<button id="dialog-resTp2-close-button" class="aui-button aui-button-link">Закрыть</button>
+						</div>								
+					</footer>
+				</section>	
+				<!--Дополнительные функции. Форма-->
+				<section role="dialog" id="insert-dialog-resTp3" class="aui-layer aui-dialog2 aui-dialog2-large" aria-hidden="true">
+					<!-- dialog2 header -->
+					<header class="aui-dialog2-header">
+						<!-- The dialog2's title -->
+						<h2 class="aui-dialog2-header-main">Добавление/редактирование дополнительных функций</h2>
+						<!-- Close icon -->
+						<a class="aui-dialog2-header-close">
+							<span class="aui-icon aui-icon-small aui-iconfont-close-dialog">Close</span>
+						</a>
+					</header>
+					<!-- Main dialog2 content -->
+					<div class="aui-dialog2-content">
+						<form action="#" method="post" id="resTp3Form" class="aui">
+							<fieldset>
+								<div class="field-group status">
+									<label for="resTp3Id">ИД</label>
+									<input class="text" type="text" id="resTp3Id" name="id" title="ИД" maxlength="255">																
+								</div>	
+								<div class="field-group status">
+									<label for="resTp3Name">Наименование</label>
+									<input class="text" type="text" id="resTp3Name" name="name" title="Наименование" maxlength="1000">								
+								</div>								
+								<div class="field-group status">
+									<label for="resTp3СdStr">Структурный код</label>
+									<input class="text" type="text" id="resTp3СdStr" name="сdStr" title="Структурный код" maxlength="1000">								
+								</div>
+								<div class="field-group">
+									<label for="resTp3Resource3Name">Ресурс</label>
+									<select class="select" id="resTp3Resource3Name" title="1й уровень ресурса">								
+									</select>	
+								</div>
+								<div class="field-group">
+									<label for="resTp3Modul3Name">Модуль</label>
+									<select class="select" id="resTp3Modul3Name" title="2й уровень ресурса">								
+									</select>	
+								</div>
+								<div class="field-group">
+									<label for="resTp3Function3Name">Функция</label>
+									<select class="select" id="resTp3Function3Name" title="3й уровень ресурса">								
+									</select>								
+								</div>								
+								<div class="field-group">
+									<label for="resTp3Comment">Описание</label>
+									<textarea class="textarea" name="comment" id="resTp3Comment" placeholder="Ваш комментарий здесь..." maxlength="1000">Описание для заявки</textarea>
+								</div>										
+								<div class="field-group status">
+									<label for="resTp3Status">Статус</label>
+									<input class="text" type="text" id="resTp3Status" name="status" title="Статус" maxlength="255">	
+								</div>	
+								<div class="field-group status">
+									<label for="resTp3LoginExpert">Эксперт</label>
+									<input class="text" type="text" id="resTp3LoginExpert" name="loginExpert" title="Эксперт" maxlength="255">	
+								</div>	
+								<div class="field-group status">
+									<label for="resTp3LoginOwner">Владелец</label>
+									<input class="text" type="text" id="resTp3LoginOwner" name="loginOwner" title="Владелец" maxlength="255">	
+								</div>	
+								<div class="field-group status">
+									<label for="resTp3LoginSpecialist">Специалист</label>
+									<input class="text" type="text" id="resTp3LoginSpecialist" name="loginSpecialist" title="Специалист" maxlength="255">	
+								</div>									
+								<div class="field-group status">
+									<label for="resTp3Type">Тип ресурса</label>
+									<input class="text" type="text" id="resTp3Type" name="type" title="Тип ресурса" maxlength="255">	
+								</div>							
+							</fieldset>
+						 </form>  
+					</div>
+					<!-- dialog2 footer -->
+					<footer class="aui-dialog2-footer">
+						<!-- Actions to render on the right of the footer -->
+						<div class="aui-dialog2-footer-actions">
+							<button id="dialog-resTp3-submit-button" class="aui-button aui-button-primary">Сохранить</button>
+							<button id="dialog-resTp3-close-button" class="aui-button aui-button-link">Закрыть</button>
+						</div>								
+					</footer>
+				</section>	
+				<!--Витрина данных. Форма-->
+				<section role="dialog" id="insert-dialog-resTp4" class="aui-layer aui-dialog2 aui-dialog2-large" aria-hidden="true">
+					<!-- dialog2 header -->
+					<header class="aui-dialog2-header">
+						<!-- The dialog2's title -->
+						<h2 class="aui-dialog2-header-main">Добавление/редактирование витрины данных</h2>
+						<!-- Close icon -->
+						<a class="aui-dialog2-header-close">
+							<span class="aui-icon aui-icon-small aui-iconfont-close-dialog">Close</span>
+						</a>
+					</header>
+					<!-- Main dialog2 content -->
+					<div class="aui-dialog2-content">
+						<form action="#" method="post" id="resTp4Form" class="aui">
+							<fieldset>
+								<div class="field-group status">
+									<label for="resTp4Id">ИД</label>
+									<input class="text" type="text" id="resTp4Id" name="id" title="ИД" maxlength="255">																
+								</div>	
+								<div class="field-group status">
+									<label for="resTp4Name">Наименование</label>
+									<input class="text" type="text" id="resTp4Name" name="name" title="Наименование" maxlength="1000">								
+								</div>								
+								<div class="field-group status">
+									<label for="resTp4СdStr">Структурный код</label>
+									<input class="text" type="text" id="resTp4СdStr" name="сdStr" title="Структурный код" maxlength="1000">								
+								</div>
+								<div class="field-group">
+									<label for="resTp4Resource4Name">Ресурс</label>
+									<select class="select" id="resTp4Resource4Name" title="1й уровень ресурса">								
+									</select>	
+								</div>
+								<div class="field-group">
+									<label for="resTp4Modul4Name">Модуль</label>
+									<select class="select" id="resTp4Modul4Name" title="2й уровень ресурса">								
+									</select>	
+								</div>
+								<div class="field-group">
+									<label for="resTp4Function4Name">Функция</label>
+									<select class="select" id="resTp4Function4Name" title="3й уровень ресурса">								
+									</select>								
+								</div>								
+								<div class="field-group">
+									<label for="resTp4Comment">Описание</label>
+									<textarea class="textarea" name="comment" id="resTp4Comment" placeholder="Ваш комментарий здесь..." maxlength="1000">Описание для заявки</textarea>
+								</div>										
+								<div class="field-group status">
+									<label for="resTp4Status">Статус</label>
+									<input class="text" type="text" id="resTp4Status" name="status" title="Статус" maxlength="255">	
+								</div>	
+								<div class="field-group status">
+									<label for="resTp4LoginExpert">Эксперт</label>
+									<input class="text" type="text" id="resTp4LoginExpert" name="loginExpert" title="Эксперт" maxlength="255">	
+								</div>	
+								<div class="field-group status">
+									<label for="resTp4LoginOwner">Владелец</label>
+									<input class="text" type="text" id="resTp4LoginOwner" name="loginOwner" title="Владелец" maxlength="255">	
+								</div>	
+								<div class="field-group status">
+									<label for="resTp4LoginSpecialist">Специалист</label>
+									<input class="text" type="text" id="resTp4LoginSpecialist" name="loginSpecialist" title="Специалист" maxlength="255">	
+								</div>									
+								<div class="field-group status">
+									<label for="resTp4Type">Тип ресурса</label>
+									<input class="text" type="text" id="resTp4Type" name="type" title="Тип ресурса" maxlength="255">	
+								</div>							
+							</fieldset>
+						 </form>  
+					</div>
+					<!-- dialog2 footer -->
+					<footer class="aui-dialog2-footer">
+						<!-- Actions to render on the right of the footer -->
+						<div class="aui-dialog2-footer-actions">
+							<button id="dialog-resTp4-submit-button" class="aui-button aui-button-primary">Сохранить</button>
+							<button id="dialog-resTp4-close-button" class="aui-button aui-button-link">Закрыть</button>
+						</div>								
+					</footer>
+				</section>	
+		
+				<!--Блок видов ресурсов -->					
+				<div id="id-resTp" class="resTp">				
+					<div class="aui-tabs horizontal-tabs">
+						<ul class="tabs-menu">
+							<li id="tabs-li-resTp1" class="menu-item active-tab">
+								<a href="#tabs-resTp1">Информационные системы</a>
+							</li>
+							<li id="tabs-li-resTp2" class="menu-item">
+								<a href="#tabs-resTp2">Оборудование</a>
+							</li>
+							<li id="tabs-li-resTp3" class="menu-item">
+								<a href="#tabs-resTp3">Другие фунции</a>
+							</li>			
+							<li id="tabs-li-resTp4" class="menu-item">
+								<a href="#tabs-resTp4">Витрина данных</a>
+							</li>								
+						</ul>
+						<div class="tabs-pane active-pane" id="tabs-resTp1">
+							<div hidden>
+							<table id="tbl-resTp" class="aui tblentity">
+								<thead style="background: #CCCCCC">
+									<tr>
+										<th>Ресурс</th>
+										<th>Модуль</th>
+										<th>Функция</th>
+										<th>Комментарий</th>
+										<th>Статус</th>
+										
+										<th></th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody id="tbody-resTp" class="tbody-entity">
+								</tbody>								
+							</table>
+							</div>							
+						
+							<!--Таблица. Информационные системы. -->
+							<table id="tbl-resTp1" class="aui tblentity">
+								<thead style="background: #CCCCCC">
+									<tr>
+										<th>Ресурс</th>
+										<th>Модуль</th>
+										<th>Функция</th>
+										<th>Комментарий</th>
+										<th>Статус</th>
+										
+										<th></th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody id="tbody-resTp1" class="tbody-entity">
+								</tbody>								
+							</table>	
+						</div>	
+						<div class="tabs-pane" id="tabs-resTp2">
+							<!--Таблица. Информационные системы. -->
+							<table id="tbl-resTp2" class="aui tblentity">
+								<thead style="background: #CCCCCC">
+									<tr>
+										<th>Ресурс</th>
+										<th>Модуль</th>
+										<th>Функция</th>
+										<th>Комментарий</th>
+										<th>Статус</th>
+										
+										<th></th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody id="tbody-resTp2" class="tbody-entity">
+								</tbody>								
+							</table>	
+						</div>	
+						<div class="tabs-pane" id="tabs-resTp3">
+							<!--Таблица. Информационные системы. -->
+							<table id="tbl-resTp3" class="aui tblentity">
+								<thead style="background: #CCCCCC">
+									<tr>
+										<th>Ресурс</th>
+										<th>Модуль</th>
+										<th>Функция</th>
+										<th>Комментарий</th>
+										<th>Статус</th>
+										
+										<th></th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody id="tbody-resTp3" class="tbody-entity">
+								</tbody>								
+							</table>	
+						</div>	
+						<div class="tabs-pane" id="tabs-resTp4">
+							<!--Таблица. Информационные системы. -->
+							<table id="tbl-resTp4" class="aui tblentity">
+								<thead style="background: #CCCCCC">
+									<tr>
+										<th>Ресурс</th>
+										<th>Модуль</th>
+										<th>Функция</th>
+										<th>Комментарий</th>
+										<th>Статус</th>
+										
+										<th></th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody id="tbody-resTp4" class="tbody-entity">
+								</tbody>								
+							</table>	
+						</div>							
+					</div>						
+				</div>			
+				<nav class="aui-navgroup aui-navgroup-horizontal">
+					<div id="containerBtnBackToIssue" class="aui-navgroup-inner">
+						<button id="btnSave" class="aui-button" title="Сохранить и вернуться к экрану редактирования заявки">Подтвердить</button>                
+						<button id="btnCancel" class="aui-button aui-button-link cancel" title="Отменить и вернуться к экрану редактирования заявки">Отменить</button>
+					</div>
+				</nav>							
+			</div>				
+		</div>
+    </div>
+  </body>
+</html>

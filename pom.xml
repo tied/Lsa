@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.itzabota.jira.plugins.servye</groupId>
+    <artifactId>lsa</artifactId>
+    <version>1.0.404.test</version>
+    <organization>
+        <name>IT-Zabota</name>
+        <url>http://www.it-zabota.com/</url>
+    </organization>
+    <name>LSA</name>
+    <description>This is the com.itzabota.jira.plugins.servye:lsa plugin for Atlassian JIRA.</description>
+    <packaging>atlassian-plugin</packaging>
+    <dependencies>
+       <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+			<version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.sal</groupId>
+            <artifactId>sal-api</artifactId>
+            <scope>provided</scope>
+			<version>3.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.plugin</groupId>
+            <artifactId>atlassian-spring-scanner-annotation</artifactId>
+            <version>${atlassian.spring.scanner.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.plugin</groupId>
+            <artifactId>atlassian-spring-scanner-runtime</artifactId>
+            <version>${atlassian.spring.scanner.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- WIRED TEST RUNNER DEPENDENCIES -->
+        <dependency>
+            <groupId>com.atlassian.plugins</groupId>
+            <artifactId>atlassian-plugins-osgi-testrunner</artifactId>
+            <version>${plugin.testrunner.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>jsr311-api</artifactId>
+            <version>1.1.1</version>
+            <scope>provided</scope>
+        </dependency>
+		<!--dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>1.19</version>
+		</dependency-->		
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.2-atlassian-1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.8.5</version>
+            <scope>test</scope>
+        </dependency>	
+		
+        <!-- web action -->
+        <dependency>
+            <groupId>com.atlassian.jira</groupId>
+            <artifactId>jira-api</artifactId>
+            <version>${jira.version}</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>hsqldb</groupId>
+                    <artifactId>hsqldb</artifactId>
+                </exclusion>
+                <!--                <exclusion>
+                                    <groupId>com.google.guava</groupId>
+                                    <artifactId>guava</artifactId>
+                                </exclusion>-->
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.jira</groupId>
+            <artifactId>jira-core</artifactId>
+            <version>${jira.version}</version>
+            <scope>provided</scope>
+        </dependency>	
+
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>javax.persistence</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+		
+		
+		<dependency>
+			<groupId>org.apache.openjpa</groupId>
+			<artifactId>openjpa</artifactId>
+			<version>${openjpa.version}</version>
+		</dependency>	
+		
+
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.16</version>
+		</dependency>		
+		
+		<dependency>
+		  <groupId>com.microsoft.sqlserver</groupId>
+		  <artifactId>sqljdbc4</artifactId>
+		  <version>4.0</version>
+		</dependency>	
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+			<version>2.5</version>
+        </dependency>
+		<dependency>
+	  		<groupId>com.atlassian.templaterenderer</groupId>
+	  		<artifactId>atlassian-template-renderer-api</artifactId>
+	  		<version>3.0.0</version>
+	  		<scope>provided</scope>
+		</dependency>				
+	
+    </dependencies>
+	
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.atlassian.maven.plugins</groupId>
+                <artifactId>maven-jira-plugin</artifactId>
+                <version>${amps.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <productVersion>${jira.version}</productVersion>
+                    <productDataVersion>${jira.version}</productDataVersion>	
+					<compressResources>false</compressResources>					
+					<!-- Uncomment to install TestKit backdoor in JIRA. -->
+					<!--
+					<pluginArtifacts>
+						<pluginArtifact>
+							<groupId>com.atlassian.jira.tests</groupId>
+							<artifactId>jira-testkit-plugin</artifactId>
+							<version>${testkit.version}</version>
+						</pluginArtifact>
+					</pluginArtifacts>
+					-->
+                </configuration>
+				
+            </plugin>
+			<plugin>
+				<groupId>org.apache.openjpa</groupId>
+				<artifactId>openjpa-maven-plugin</artifactId>
+				<version>${openjpa.version}</version>
+				<configuration>
+					<includes>com/itzabota/jira/plugins/servye/lsa/db/model/*.class</includes>
+					<excludes>com/itzabota/jira/plugins/servye/lsa/db/model/XML*.class</excludes>
+					<addDefaultConstructor>true</addDefaultConstructor>               
+					<enforcePropertyRestrictions>true</enforcePropertyRestrictions>
+				</configuration>
+				<executions>
+					<execution>
+						<id>enhancer</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>enhance</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.openjpa</groupId>
+						<artifactId>openjpa</artifactId>
+						<!-- set the version to be the same as the level in your runtime -->
+						<version>${openjpa.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>			
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <properties>
+		<jdkLevel>1.7</jdkLevel>
+		<java.version>1.7</java.version>	        
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jira.version>7.0.5</jira.version>
+        <amps.version>6.2.3</amps.version>
+        <plugin.testrunner.version>1.2.3</plugin.testrunner.version>
+        <atlassian.spring.scanner.version>1.2.6</atlassian.spring.scanner.version>
+        <!-- This key is used to keep the consistency between the key in atlassian-plugin.xml and the key to generate bundle. -->
+        <!-- TestKit version 6.x for JIRA 6.x -->
+        <testkit.version>6.3.11</testkit.version>
+		
+		<openjpa.version>2.4.0</openjpa.version>
+    </properties>
+</project>

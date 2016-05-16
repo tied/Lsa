@@ -1,0 +1,122 @@
+	<workflow-function key="approveSubtaskWriteChainCommentPostFunction" name="LSA. Approve Subtask ApprovalChain Comment Assign."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Approve Subtask ApprovalChain Comment Assign.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.ApproveSubtaskWriteChainCommentPostFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/approveSubtask-function-view.vm"/>
+	</workflow-function>
+	
+	<workflow-function key="rejectSubtaskWriteChainCommentPostFunction" name="LSA. Reject Subtask ApprovalChain Comment Assign."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Reject Subtask ApprovalChain Comment Assign.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.RejectSubtaskWriteChainCommentPostFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/rejectSubtask-function-view.vm"/>
+	</workflow-function>
+
+	<workflow-function key="assignPreviousAssigneePostFunction" name="LSA. Assign previous assignee."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Assign previous assignee.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.AssignPreviousAssigneePostFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/assigneePrevious-function-view.vm"/>
+	</workflow-function>
+
+	<workflow-function key="resolutionDonePostFunction" name="LSA. Update resolution with Done value."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Update resolution with Done value.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.ResolutionDonePostFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/resolutionDone-function-view.vm"/>
+	</workflow-function>
+	
+	<workflow-function key="resolutionUnDonePostFunction" name="LSA. Update resolution with UnDone value."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Update resolution with UnDone value.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.ResolutionUnDonePostFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/resolutionUnDone-function-view.vm"/>
+	</workflow-function>	
+
+	<workflow-function key="solveSubtaskWriteChainPostFunction" name="LSA. Solve Subtask ApprovalChain Comment Assign."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Solve Subtask ApprovalChain Comment Assign.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.SolveSubtaskWriteChainPostFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/solveSubtask-function-view.vm"/>
+	</workflow-function>	
+	
+	<workflow-function key="updateAssigneeHeadFunction" name="LSA. Update assignee with Manager of Employee."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Update assignee with Manager of Employee.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.UpdateAssigneeHeadFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/issueUpdateEmployeeManager-function-view.vm"/>
+	</workflow-function>		
+	
+	<workflow-function key="updateAssigneeManagerFunction" name="LSA. Update assignee with Manager of Project."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Update assignee with Manager of Project.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.UpdateAssigneeManagerFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/issueUpdateManager-function-view.vm"/>
+	</workflow-function>		
+	
+	<workflow-function key="updateAssigneeReporterFunction" name="LSA. Update assignee with reporter of issue."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Update assignee with reporter of issue.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.UpdateAssigneeReporterFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/issueUpdateReporter-function-view.vm"/>
+	</workflow-function>		
+	
+	
+	<workflow-function key="resTpPostFunction" name="LSA. Edit Resources."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Edit Resources.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.ResTpPostFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/resTp-function-view.vm"/>
+	</workflow-function>
+	
+	<workflow-function key="createSubTasksPostFunction" name="LSA. Create Subtasks."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Create Subtasks.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.CreateSubTasksPostFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/createSubTasks-function-view.vm"/>
+	</workflow-function>
+	
+	
+	
+	<workflow-function key="updateAfterCreateFunction" name="LSA. Update Issue after create. Summary and Assignee."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Update Issue after create. Summary and Assignee.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.UpdateAfterCreateFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/issue-create-function-view.vm"/>
+	</workflow-function>	

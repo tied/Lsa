@@ -1,0 +1,34 @@
+$webResourceManager.requireResource("com.itzabota.jira.plugins.servye.lsa:auiBase")
+#if ($value)
+<table id = "tbl-${fldVal}" name="$customField.name" class="aui tblcfld" style="width:100%">
+	<thead style="background: #CCCCCC">
+		<tr>
+			#foreach( $headCell in $table.headList )
+			  #if ( !$headCell.isVisible.equalsIgnoreCase("0") )			
+				<th style="width: 135px" id="${fldVal}-head-${foreach.counter}">
+					 $headCell.value
+				</th>
+			  #end
+			#end												
+		</tr>
+	</thead>
+	<tbody class="tbody-${fldVal}">
+		#foreach ( $row in $table.rowList)
+		<tr id="${fldVal}-row-$row.cellList.get(0).value">
+			#foreach ( $colCell in $row.cellList)
+			  #if ( !$colCell.isVisible.equalsIgnoreCase("0") )
+				#if (!$colCell.value || "$colCell.value" == "" || "$colCell.value" == "null")
+				  <td style="width: 135px">-</td>
+				#else
+				  <td style="width: 135px"> $colCell.value
+				  </td>
+				#end
+			  #end
+			#end
+		</tr>
+		#end	
+	</tbody>								
+</table>
+#else
+<span class="aui-label">Заполните поле через подменю заявки "Ресурсы"</span>
+#end

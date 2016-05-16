@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+	<plugin-info>
+		<description>${project.description}</description>
+		<version>${project.version}</version>
+		<vendor name="${project.organization.name}" url="${project.organization.url}"/>
+		<param name="plugin-icon">images/pluginIcon.png</param>
+		<param name="plugin-logo">images/pluginLogo.png</param>
+	</plugin-info>
+	<!-- add our i18n resource -->
+	<resource type="i18n" name="i18n" location="com.itzabota.jira.plugins.servye.lsa"/>
+	<!-- add our web resources -->
+	<web-resource key="lsa-resources" name="lsa Web Resources">
+		<dependency>com.atlassian.auiplugin:ajs</dependency>
+		<resource type="download" name="lsa.css" location="/css/lsa.css"/>		
+		<resource type="download" name="lsa.js" location="/js/lsa.js"/>
+		<resource type="download" name="images/" location="images/"/>	
+<!--
+		<resource type="download" name="cfldGridImgViewRec" location="images/customfields/cfldGrid/eye16.png"/>
+		<resource type="download" name="cfldGridImgUnViewRec" location="images/customfields/cfldGrid/eye-not16.png"/>
+		<resource type="download" name="cfldGridImgDelRec" location="images/customfields/cfldGrid/delete16.png"/>
+		<resource type="download" name="cfldGridImgArcRec" location="images/customfields/cfldGrid/archive16.png"/>	
+-->		
+		<context>lsa</context>
+	</web-resource>
+	
+	<web-resource key="auiBase" name="AUI BASE">
+		<dependency>com.atlassian.auiplugin:ajs</dependency>
+		<dependency>com.atlassian.auiplugin:aui-select2</dependency>		
+		<dependency>com.atlassian.auiplugin:dialog2</dependency>
+		<dependency>com.atlassian.auiplugin:aui-labels</dependency>
+	</web-resource>  	
+	
+
+	<web-resource key="cfldGrid" name="Grid Cfld Web Resources">
+		<resource type="download" name="cfldGrid.js" location="js/customfields/cfldGrid/cfldGrid.js">
+			<property key="content-type" value="text/javascript"/>
+		</resource>
+		<resource type="download" name="cfldGrid.css" location="css/customfields/cfldGrid/cfldGrid.css">
+			<property key="content-type" value="text/css"/>
+		</resource>
+		<resource name="cfldGrid-edit.vm" type="velocity" location="templates/customfields/cfldGrid/cfldGrid-edit.vm"/>
+		<resource name="cfldGrid-view.vm" type="velocity" location="templates/customfields/cfldGrid/cfldGrid-view.vm"/>		
+		
+	</web-resource>
+	
+	
+	<web-resource key="resTpVocabulary" name="Resource Type Web Resources">	
+		<resource type="download" name="vocabulary.js" location="js/customfields/resTp/vocabulary.js">
+			<property key="content-type" value="text/javascript"/>
+		</resource>	
+	</web-resource>		
+	
+	<web-resource key="resTp" name="Resource Type Web Resources">	
+		<resource type="download" name="resTp.js" location="js/customfields/resTp/resTp.js">				
+			<property key="content-type" value="text/javascript"/>
+		</resource>		
+		<resource type="download" name="resTp.css" location="css/customfields/resTp/resTp.css">		
+			<property key="content-type" value="text/css"/>
+		</resource>			
+	</web-resource>	
+	
+	<web-item key="issue-attachResources" name="Attach resources"
+	section="operations-top-level" weight="100">
+		<label>Ресурсы</label>
+		<tooltip>Создание и редактирование ресурсов заявки</tooltip>
+		<link linkId="issue-attachResources-link">/secure/ResTpAction.jspa?key=${issue.key}&amp;parentId=${issue.parentId}</link>
+		<param name="target" value="_blank" />
+		<condition class="com.itzabota.jira.plugins.servye.lsa.menu.condition.EditResourceCondition"/>
+	</web-item>	
+	
+    <webwork1 key="lsaActions" name="LsaActions" class="java.lang.Object">
+      <!-- These actions are using velocity templates since they can
+           be packaged and deployed with the plugin. Note that the
+           name of each template file has to be unique across all
+           plugins, not just this one. -->
+      <actions>
+        <!-- When FirstNewAction.jspa is used in a URL the class that is
+             named here (ActionAlpha) will be called. -->
+        <action name="com.itzabota.jira.plugins.servye.lsa.webactions.ResTpAction" alias="ResTpAction">
+			<view name="success">/templates/customfields/resTp/resTp-action-edit.vm</view>
+			<view name="error">/templates/customfields/resTp/resTp-action-error.vm</view>
+        </action>
+		<!--action name="com.itzabota.jira.plugins.servye.lsa.webactions.CreateIssueAction" alias="CreateIssue">
+			<view name="success">/secure/views/createissue-details.jsp</view>
+			<view name="error">/secure/views/createissue-start.jsp</view>
+			<view name="invalidlicense">/secure/views/createissue-invalidlicense.jsp</view>
+			<view name="input">/secure/views/createissue-start.jsp</view>
+		</action-->
+      </actions>
+    </webwork1>	
+	
+	<customfield-type name="BaseCfldLink" i18n-name-key="baseCfldLink.name" key="baseCfldLink" class="com.itzabota.jira.plugins.servye.customfield.link.BaseCfldLink">
+		<description key="baseCfldLink.description">String field-url with Linkable edit</description>		
+		<resource name="view" type="velocity" location="templates/customfields/link/link-view.vm"/>
+		<resource name="edit" type="velocity" location="templates/customfields/link/link-edit.vm"/>		
+		<resource type="xml" name="link-xml.vm" location="templates/customfields/link/link-xml.vm"/>
+	</customfield-type>		
+	
+	<customfield-type name="LsaResTp1" i18n-name-key="resTp1-cfldGrid.name" key="cfldExtDbGridResTp1" class="com.itzabota.jira.plugins.servye.customfield.cfldextdbgrid.CfldExtDbGridResTp1">
+		<description key="resTp1-cfldGrid.description">The resTp1 custom field grid plugin</description>		
+		<resource name="view" type="velocity" location="templates/customfields/resTp/resTp-view.vm"/>
+		<resource name="edit" type="velocity" location="templates/customfields/resTp/resTp-edit.vm"/>		
+		<resource type="xml" name="resTp-xml.vm" location="templates/customfields/resTp/resTp-xml.vm"/>
+	</customfield-type>	
+	
+	<customfield-type name="LsaResTp2" i18n-name-key="resTp2-cfldGrid.name" key="cfldExtDbGridResTp2" class="com.itzabota.jira.plugins.servye.customfield.cfldextdbgrid.CfldExtDbGridResTp2">
+		<description key="resTp2-cfldGrid.description">The resTp2 custom field grid plugin</description>		
+		<resource name="view" type="velocity" location="templates/customfields/resTp/resTp-view.vm"/>
+		<resource name="edit" type="velocity" location="templates/customfields/resTp/resTp-edit.vm"/>		
+		<resource type="xml" name="resTp-xml.vm" location="templates/customfields/resTp/resTp-xml.vm"/>
+	</customfield-type>	
+
+	<customfield-type name="LsaResTp3" i18n-name-key="resTp3-cfldGrid.name" key="cfldExtDbGridResTp3" class="com.itzabota.jira.plugins.servye.customfield.cfldextdbgrid.CfldExtDbGridResTp3">
+		<description key="resTp3-cfldGrid.description">The resTp3 custom field grid plugin</description>		
+		<resource name="view" type="velocity" location="templates/customfields/resTp/resTp-view.vm"/>
+		<resource name="edit" type="velocity" location="templates/customfields/resTp/resTp-edit.vm"/>		
+		<resource type="xml" name="resTp-xml.vm" location="templates/customfields/resTp/resTp-xml.vm"/>
+	</customfield-type>	
+
+	<customfield-type name="LsaResTp4" i18n-name-key="resTp4-cfldGrid.name" key="cfldExtDbGridResTp4" class="com.itzabota.jira.plugins.servye.customfield.cfldextdbgrid.CfldExtDbGridResTp4">
+		<description key="resTp4-cfldGrid.description">The resTp4 custom field grid plugin</description>		
+		<resource name="view" type="velocity" location="templates/customfields/resTp/resTp-view.vm"/>
+		<resource name="edit" type="velocity" location="templates/customfields/resTp/resTp-edit.vm"/>		
+		<resource type="xml" name="resTp-xml.vm" location="templates/customfields/resTp/resTp-xml.vm"/>
+	</customfield-type>			   		
+	
+	<workflow-function key="approveSubtaskWriteChainCommentPostFunction" name="LSA. Approve Subtask ApprovalChain Comment Assign."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Approve Subtask ApprovalChain Comment Assign.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.ApproveSubtaskWriteChainCommentPostFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/approveSubtask-function-view.vm"/>
+	</workflow-function>
+	
+	<workflow-function key="rejectSubtaskWriteChainCommentPostFunction" name="LSA. Reject Subtask ApprovalChain Comment Assign."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Reject Subtask ApprovalChain Comment Assign.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.RejectSubtaskWriteChainCommentPostFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/rejectSubtask-function-view.vm"/>
+	</workflow-function>
+
+	<workflow-function key="assignPreviousAssigneePostFunction" name="LSA. Assign previous assignee."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Assign previous assignee.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.AssignPreviousAssigneePostFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/assigneePrevious-function-view.vm"/>
+	</workflow-function>
+
+	<workflow-function key="resolutionDonePostFunction" name="LSA. Update resolution with Done value."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Update resolution with Done value.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.ResolutionDonePostFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/resolutionDone-function-view.vm"/>
+	</workflow-function>
+	
+	<workflow-function key="resolutionUnDonePostFunction" name="LSA. Update resolution with UnDone value."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Update resolution with UnDone value.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.ResolutionUnDonePostFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/resolutionUnDone-function-view.vm"/>
+	</workflow-function>	
+
+	<workflow-function key="solveSubtaskWriteChainPostFunction" name="LSA. Solve Subtask ApprovalChain Comment Assign."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Solve Subtask ApprovalChain Comment Assign.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.SolveSubtaskWriteChainPostFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/solveSubtask-function-view.vm"/>
+	</workflow-function>	
+	
+	<workflow-function key="updateAssigneeHeadFunction" name="LSA. Update assignee with Manager of Employee."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Update assignee with Manager of Employee.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.UpdateAssigneeHeadFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/issueUpdateEmployeeManager-function-view.vm"/>
+	</workflow-function>		
+	
+	<workflow-function key="updateAssigneeManagerFunction" name="LSA. Update assignee with Manager of Project."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Update assignee with Manager of Project.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.UpdateAssigneeManagerFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/issueUpdateManager-function-view.vm"/>
+	</workflow-function>		
+	
+	<workflow-function key="updateAssigneeReporterFunction" name="LSA. Update assignee with reporter of issue."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Update assignee with reporter of issue.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.UpdateAssigneeReporterFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/issueUpdateReporter-function-view.vm"/>
+	</workflow-function>		
+	
+	
+	<workflow-function key="resTpPostFunction" name="LSA. Edit Resources."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Edit Resources.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.ResTpPostFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/resTp-function-view.vm"/>
+	</workflow-function>
+	
+	<workflow-function key="createSubTasksPostFunction" name="LSA. Create Subtasks."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Create Subtasks.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.CreateSubTasksPostFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/createSubTasks-function-view.vm"/>
+	</workflow-function>
+	
+	
+	
+	<workflow-function key="updateAfterCreateFunction" name="LSA. Update Issue after create. Summary and Assignee."
+	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
+		<description>LSA. Update Issue after create. Summary and Assignee.</description>
+		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.UpdateAfterCreateFunction</function-class>	
+		<orderable>true</orderable>
+		<unique>false</unique>
+		<deletable>true</deletable>
+		<resource type="velocity" name="view" location="templates/postfunctions/issue-create-function-view.vm"/>
+	</workflow-function>	
+	
+    <!-- publish our component -->	
+					
+	
+    <component key="configImpl" class="com.itzabota.jira.plugins.servye.customfield.cfldextdbgrid.config.ConfigImpl" public="true">
+        <interface>com.itzabota.jira.plugins.servye.customfield.cfldextdbgrid.config.Config</interface>
+    </component>		
+	
+    <!--component key="lsaComponent" class="com.itzabota.jira.plugins.servye.lsa.impl.LSAComponentImpl" public="true">
+        <interface>com.itzabota.jira.plugins.servye.lsa.api.LSAComponent</interface>
+    </component-->	
+	
+    <!-- import from the product container -->
+    <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties" />	
+	
+	<component-import key="i18nResolver" interface="com.atlassian.sal.api.message.I18nResolver"/>
+	
+	<component-import key="userManager" interface="com.atlassian.sal.api.user.UserManager" />
+	
+	<component-import key="workflowManager" interface="com.atlassian.jira.workflow.WorkflowManager" />
+	
+	<component-import key="webResourceManager" interface="com.atlassian.plugin.webresource.WebResourceManager"/>	
+	
+	<component-import key="issueManager" interface="com.atlassian.jira.issue.IssueManager"/>
+	
+	<!--component-import key="issueFactory" interface="com.atlassian.jira.issue.IssueFactory"/-->
+	
+
+	<component-import key="templateRenderer" interface="com.atlassian.templaterenderer.TemplateRenderer" filter=""/>
+
+	<component key="lsaIssueListener" class="com.itzabota.jira.plugins.servye.lsa.listeners.LsaIssueListener">
+		<description>Listener of LSA issues</description>
+	</component>	
+	
+	<component-import key="eventPublisher" interface="com.atlassian.event.api.EventPublisher"/>	
+	
+
+	
+    <component key="resTpAction" class="com.itzabota.jira.plugins.servye.lsa.webactions.ResTpAction"/>
+		
+	<component key="employeeDAOImpl" class="com.itzabota.jira.plugins.servye.lsa.db.dao.EmployeeDAOImpl" />
+	<component key="accessApproveDAOImpl" class="com.itzabota.jira.plugins.servye.lsa.db.dao.AccessApproveDAOImpl" />
+	<component key="accessHistoryDAOImpl" class="com.itzabota.jira.plugins.servye.lsa.db.dao.AccessHistoryDAOImpl" />
+	<component key="accessStatusDAOImpl" class="com.itzabota.jira.plugins.servye.lsa.db.dao.AccessStatusDAOImpl" />
+	<component key="profileDAOImpl" class="com.itzabota.jira.plugins.servye.lsa.db.dao.ProfileDAOImpl" />
+	<component key="resourceDAOImpl" class="com.itzabota.jira.plugins.servye.lsa.db.dao.ResourceDAOImpl" />
+	<component key="resourceIssueDAOImpl" class="com.itzabota.jira.plugins.servye.lsa.db.dao.ResourceIssueDAOImpl" />
+	<component key="resourceProfileDAOImpl" class="com.itzabota.jira.plugins.servye.lsa.db.dao.ResourceProfileDAOImpl" />
+	
+	<component key="employeeServiceImpl" class="com.itzabota.jira.plugins.servye.lsa.db.service.EmployeeServiceImpl" />
+	<component key="accessApproveServiceImpl" class="com.itzabota.jira.plugins.servye.lsa.db.service.AccessApproveServiceImpl" />
+	<component key="accessHistoryServiceImpl" class="com.itzabota.jira.plugins.servye.lsa.db.service.AccessHistoryServiceImpl" />
+	<component key="accessStatusServiceImpl" class="com.itzabota.jira.plugins.servye.lsa.db.service.AccessStatusServiceImpl" />
+	<component key="profileServiceImpl" class="com.itzabota.jira.plugins.servye.lsa.db.service.ProfileServiceImpl" />
+	<component key="resourceServiceImpl" class="com.itzabota.jira.plugins.servye.lsa.db.service.ResourceServiceImpl" />
+	<component key="resourceIssueServiceImpl" class="com.itzabota.jira.plugins.servye.lsa.db.service.ResourceIssueServiceImpl" />
+	<component key="resourceProfileServiceImpl" class="com.itzabota.jira.plugins.servye.lsa.db.service.ResourceProfileServiceImpl" />	
+
+	<component key="resServiceImpl" class="com.itzabota.jira.plugins.servye.lsa.db.service.ResServiceImpl" />	
+	<component key="resTpServiceImpl" class="com.itzabota.jira.plugins.servye.lsa.db.service.ResTpServiceImpl" />	
+
+	<!-- Rest services -->
+
+	<rest name="Employee Rest Resource" key="employee-rest-resource" path="/lsa" version="2.0">
+	  <description key="employee-rest-resource.description">Employee Rest Resource Plugin</description>
+	</rest>			
+	<rest name="AccessApprove Rest Resource" key="accessApprove-rest-resource" path="/lsa" version="2.0">
+	  <description key="accessApprove-rest-resource.description">AccessApprove Rest Resource Plugin</description>
+	</rest>			
+	<rest name="AccessHistory Rest Resource" key="accessHistory-rest-resource" path="/lsa" version="2.0">
+	  <description key="accessHistory-rest-resource.description">AccessHistory Rest Resource Plugin</description>
+	</rest>			
+	<rest name="AccessStatus Rest Resource" key="accessStatus-rest-resource" path="/lsa" version="2.0">
+	  <description key="accessStatus-rest-resource.description">AccessStatus Rest Resource Plugin</description>
+	</rest>			
+	<rest name="Profile Rest Resource" key="profile-rest-resource" path="/lsa" version="2.0">
+	  <description key="profile-rest-resource.description">Profile Rest Resource Plugin</description>
+	</rest>			
+	<rest name="Resource Rest Resource" key="resource-rest-resource" path="/lsa" version="2.0">
+	  <description key="resource-rest-resource.description">Resource Rest Resource Plugin</description>
+	</rest>			
+	<rest name="ResourceIssue Rest Resource" key="resourceIssue-rest-resource" path="/lsa" version="2.0">
+	  <description key="resourceIssue-rest-resource.description">ResourceIssue Rest Resource Plugin</description>
+	</rest>			
+	<rest name="ResourceProfile Rest Resource" key="resourceProfile-rest-resource" path="/lsa" version="2.0">
+	  <description key="resourceProfile-rest-resource.description">ResourceProfile Rest Resource Plugin</description>
+	</rest>	
+
+	<rest name="Res Rest Resource" key="res-rest-resource" path="/lsa" version="2.0">
+	  <description key="res-rest-resource.description">Res Rest Resource Plugin</description>
+	</rest>		
+	
+	<rest name="ResTp Rest Resource" key="resTp-rest-resource" path="/lsa" version="2.0">
+	  <description key="resTp-rest-resource.description">ResTp Rest Resource Plugin</description>
+	</rest>		
+	
+	<rest name="ResTpTemplateWs Rest Resource" key="resTpTemplateWs-rest-resource" path="/lsa" version="2.0">
+	  <description key="resTpTemplateWs-rest-resource.description">ResTpTemplateWs Rest Resource Plugin</description>
+	</rest>		
+	
+	<rest name="ResTpsPacket Rest Resource" key="resTpsPacket-rest-resource" path="/lsa" version="2.0">
+	  <description key="resTpsPacket-rest-resource.description">ResTpsPacket Rest Resource Plugin</description>
+	</rest>		
+
+	<rest name="ResStatusWs Rest Resource" key="ResStatusWs-rest-resource" path="/lsa" version="2.0">
+	  <description key="ResStatusWs-rest-resource.description">ResStatusWs Rest Resource Plugin</description>
+	</rest>		
+	
+	<rest name="LsaConstant Rest Resource" key="lsaConstant-rest-resource" path="/lsa" version="2.0">
+	  <description key="lsaConstant-rest-resource.description">LsaConstant Rest Resource Plugin</description>
+	</rest>		
+
+  
+</atlassian-plugin>

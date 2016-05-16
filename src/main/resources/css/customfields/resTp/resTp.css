@@ -1,0 +1,165 @@
+body { font-size: 14px; font-family: Arial,sans-serif;}
+
+.tbody-entity tr:hover {
+		background-color:#e5e5e5;
+}
+
+.field-group.status {
+	display: none;
+}
+
+
+.entity-main {
+    margin-top: -20px;
+    clear: both;
+    min-height: 600px;
+	
+    display: block;
+}  
+  
+.aui-page-header {
+    margin-bottom: 0;
+	font-size: x-large;	
+}
+
+.aui-nav-heading {
+	font-size: large;	
+}
+
+.aui-page-panel { box-sizing: border-box; }
+
+.aui-page-panel-nav {
+    width: 240px;	
+    height: 523px;
+	font-size: large;
+}
+
+.entity-header {  margin-left: auto;
+    margin-right: auto;
+    width: ;
+    padding: 20px;}
+
+.entity-header-items {font-size: large;  }
+
+#label-entity-header-items-name {
+	padding-top: 2%
+}
+
+.entity-item-active {font-weight: bold;
+	display: block;
+    line-height: 1.14285714285714;
+    padding: 7px 10px;
+    word-wrap: break-word;  
+}
+	
+.entity-item-inactive {
+	display: block;
+    line-height: 1.14285714285714;
+    padding: 7px 10px;
+word-wrap: break-word;
+}	
+
+
+li {
+    list-style-type: none; 
+   }
+   
+.aui-buttons {
+    margin-top: 10px;
+    display: inline-block;
+    font-size: 0;
+}   
+
+.resTp {
+	display: inline;
+}
+
+#groupActionsBtn {
+	padding-bottom: 20px;
+}
+
+#profileContainer {
+	padding-bottom: 20px;
+	padding-top: 20px;
+}
+
+#enterBtn {
+    width: 20em;  height: 2em;
+}
+
+#containerBtnBackToIssue {padding-left: 2%; padding-top: 1%;padding-bottom: 1%;}
+
+.selectedRow {
+    background-color: #F5F5F5;
+    color: #FFF;
+	opacity: 50%;
+}
+
+.aui-flatpack-example {
+	border: 1px solid #ccc;
+    border-radius: 3px;
+    margin: 10px 0 20px;
+    padding: 20px;
+}
+
+.form2Header {
+	color: #336699;
+}
+
+.lblFltOuter {
+	font-weight: bold;
+}
+
+/*
+#tbl-comp tr td:nth-child(2), th:nth-child(2) {
+    display: none;
+}
+
+#tbl-skill tr td:nth-child(2), th:nth-child(2) {
+    display: none;
+}
+
+#tbl-skill tr td:nth-child(3), th:nth-child(3) {
+    display: none;
+}
+
+#tbl-skillLevel tr td:nth-child(2), th:nth-child(2) {
+    display: none;
+}
+
+#tbl-skillLevel tr td:nth-child(3), th:nth-child(3) {
+    display: none;
+}
+
+#tbl-skillLevel tr td:nth-child(4), th:nth-child(4) {
+    display: none;
+}
+
+#tbl-dept tr td:nth-child(2), th:nth-child(2) {
+    display: none;
+}
+
+#tbl-role tr td:nth-child(2), th:nth-child(2) {
+    display: none;
+}
+
+#tbl-role tr td:nth-child(3), th:nth-child(3) {
+    display: none;
+}
+
+#tbl-prfTp tr td:nth-child(2), th:nth-child(2) {
+    display: none;
+}
+
+#tbl-prfTp tr td:nth-child(3), th:nth-child(3) {
+    display: none;
+}
+
+#tbl-prfTp tr td:nth-child(4), th:nth-child(4) {
+    display: none;
+}
+
+#tbl-prfTp tr td:nth-child(5), th:nth-child(5) {
+    display: none;
+}
+*/

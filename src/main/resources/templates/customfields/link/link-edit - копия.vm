@@ -1,0 +1,11 @@
+#customControlHeader ($action $customField.id $customField.name
+$fieldLayoutItem.required $displayParameters $auiparams)
+<input class="text" id="$customField.id" name="$customField.id"
+type="text" readonly="readonly">
+#if ($value)
+  $textutils.linkURL($!value.toString())
+#end
+</input>
+#customControlFooter ($action $customField.id $fieldLayoutItem.
+fieldDescription $displayParameters $auiparams)
+
