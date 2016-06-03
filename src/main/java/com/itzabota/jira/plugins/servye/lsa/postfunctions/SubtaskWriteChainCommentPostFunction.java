@@ -34,6 +34,7 @@ import com.itzabota.jira.plugins.servye.lsa.db.service.ResTpServiceImpl;
 import com.itzabota.jira.plugins.servye.lsa.db.service.ResourceServiceImpl;
 import com.itzabota.jira.plugins.utils.constant.LsaConstant;
 import com.itzabota.jira.plugins.utils.jira.IssueUtils;
+import com.itzabota.jira.plugins.utils.lsa.LsaUtils;
 import com.opensymphony.module.propertyset.PropertySet;
 import com.opensymphony.workflow.WorkflowException;
 
@@ -279,13 +280,15 @@ public abstract class SubtaskWriteChainCommentPostFunction extends AbstractJiraF
 			String body = getComment(resolutionComment, levelBeforeApproveOld);
 			ComponentAccessor.getCommentManager().create(issue, issue.getReporter(), body, false);
 			
+			ApplicationUser oldAssignee = issue.getAssignee();
+			ApplicationUser newAssignee = ComponentAccessor.getUserManager().getUserByKey(assigneeNext);
 			if (resolutionValue == Integer.valueOf(LsaConstant.LSA_ISSUE_RESOLUTION_APPROVE_VALUE)) {
 				if (!isFin) {
 					UpdateParameters.updateIssueAssignee(issue, assigneeNext);	
 					if (assigneeNext != null) {
 //						issueInputParameters.setAssigneeId(issue.getAssigneeId());
 						// !!!!!!!!!!!!!!! Обновляем исполнителя по-старому
-						issue.setAssignee(ComponentAccessor.getUserManager().getUserByKey(assigneeNext));
+						issue.setAssignee(newAssignee);						
 						issue.store();
 					}					
 				}
@@ -295,20 +298,22 @@ public abstract class SubtaskWriteChainCommentPostFunction extends AbstractJiraF
 					issueInputParameters.setAssigneeId(assigneeNext);
 					IssueUtils.transitionIssue(ComponentAccessor.getUserManager().getUserByName(LsaConstant.LSA_USER_MANAGER_DEFAULT), LsaConstant.LSA_ISSUE_WORKFLOW_ACTION_APPROVEFIN, 
 							issue, issueInputParameters);
-					issue.setAssignee(ComponentAccessor.getUserManager().getUserByKey(assigneeNext));
+					issue.setAssignee(newAssignee);
 					issue.store();				
 //					issue.setStatusId(IssueUtils.getIssueStatusByIssueStatusName(issue, LsaConstant.LSA_ISSUE_WORKFLOW_ACTION_APPROVED).getName());
 					
-				}								
+				}					
 			}
 			else {
-				issue.setAssignee(ComponentAccessor.getUserManager().getUserByKey(assigneeNext));
+				// Отказ
+				issue.setAssignee(newAssignee);
 				issue.store();
 				// Проверка, если все сабтаски решены или решени fin, то перевести основную заявку в статус решена
 				if (canSolveIssue()) {
 					solveIssue();
 				}			
 			}
+			IssueUtils.writeHistoryAssignee(issue, oldAssignee, newAssignee);
 			trans.commit();
 		}
 		catch (RuntimeException re)
@@ -324,14 +329,18 @@ public abstract class SubtaskWriteChainCommentPostFunction extends AbstractJiraF
 	
 	protected void solveIssue() {
 		MutableIssue issueMain = ComponentAccessor.getIssueManager().getIssueObject(issue.getParentId());
-		issueMain.setAssignee(ComponentAccessor.getUserManager().getUserByKey((issueMain.getReporterId())));
+		ApplicationUser oldAssignee = issueMain.getAssignee();
+		ApplicationUser newAssignee = LsaUtils.getRecipient(issueMain);
+		
+		issueMain.setAssignee(newAssignee);
 		issueMain.store();		
 		IssueInputParameters issueInputParameters = new IssueInputParametersImpl();
-		issueInputParameters.setAssigneeId(issueMain.getReporterId());				
+		issueInputParameters.setAssigneeId(LsaUtils.getRecipient(issueMain).getKey());				
 		IssueUtils.transitionIssue(ComponentAccessor.getUserManager().getUserByName(LsaConstant.LSA_USER_MANAGER_DEFAULT), LsaConstant.LSA_ISSUE_WORKFLOW_ACTION_SOLVE, 
 				issueMain, issueInputParameters);
 		issueMain.setStatusId(IssueUtils.getIssueStatusByIssueStatusName(issue, LsaConstant.LSA_ISSUE_WORKFLOW_ACTION_SOLVED).getId());
 		issueMain.store();	
+		IssueUtils.writeHistoryAssignee(issueMain, oldAssignee, newAssignee);
 	}
 	
 	protected boolean canSolveIssue() {

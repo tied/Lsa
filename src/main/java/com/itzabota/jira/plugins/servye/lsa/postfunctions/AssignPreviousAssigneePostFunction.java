@@ -1,7 +1,5 @@
 package com.itzabota.jira.plugins.servye.lsa.postfunctions;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -12,8 +10,10 @@ import org.slf4j.LoggerFactory;
 
 import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.issue.MutableIssue;
-import com.atlassian.jira.issue.history.ChangeItemBean;
+import com.atlassian.jira.issue.changehistory.ChangeHistoryItem;
+import com.atlassian.jira.user.ApplicationUser;
 import com.itzabota.jira.plugins.utils.constant.LsaConstant;
+import com.itzabota.jira.plugins.utils.jira.IssueUtils;
 import com.opensymphony.module.propertyset.PropertySet;
 import com.opensymphony.workflow.WorkflowException;
 
@@ -41,43 +41,39 @@ extends UpdateParameters
 //		if (issue.getAssigneeId() != assigneeId) {
 //			updateIssueAssignee(issue, assigneeId);	
 //		}	
+		ApplicationUser newAssignee = null;
 		if (assigneeId != null) {
-//			issueInputParameters.setAssigneeId(issue.getAssigneeId());
-			// !!!!!!!!!!!!!!! Обновляем исполнителя по-старому
-			issue.setAssignee(ComponentAccessor.getUserManager().getUserByKey(assigneeId));
-			issue.store();				
-		}			
+			newAssignee = ComponentAccessor.getUserManager().getUserByKey(assigneeId);
+		}
+		else {
+			newAssignee = null;
+		}
+		ApplicationUser oldAssignee = issue.getAssignee();
+		// !!!!!!!!!!!!!!! Обновляем исполнителя по-старому
+		issue.setAssignee(newAssignee);
+		issue.store();	
+		IssueUtils.writeHistoryAssignee(issue, oldAssignee, newAssignee);					
 	}
 	
 	private String setAssigneeId () {
 		String assigneeId = null;
 		// текущий исполнитель
 		String assigneeCurrentId = issue.getAssigneeId();
-		List<ChangeItemBean> assigneeChHistory = ComponentAccessor.getChangeHistoryManager().getChangeItemsForField(issue, LsaConstant.LSA_ISSUE_CFLD_ASSIGNEE);
-		 if (!assigneeChHistory.isEmpty()) {
-			 Collections.sort(assigneeChHistory, new Comparator<ChangeItemBean>() {
-				 public int compare(ChangeItemBean o1, ChangeItemBean o2) {
-				 return o1.getCreated().compareTo(o2.getCreated());
-				 }
-				 });			 
-			 for (int j = assigneeChHistory.size() - 1; j >= 0 ; j--) {
-				 ChangeItemBean assigneeChItemBean = assigneeChHistory.get(j);
-				 String assigneeLast = assigneeChItemBean.getFrom();
-				 if (assigneeLast == null && assigneeCurrentId == null) {
-					 continue;
-				 }
-				 if ((assigneeLast == null && assigneeCurrentId != null) ||
-						 (assigneeLast != null && assigneeCurrentId == null)) {
-					 assigneeId = assigneeLast;
-					 break;
-				 }
-				 if (!assigneeCurrentId.equalsIgnoreCase(assigneeLast)) {
-					 assigneeId = assigneeLast;
-					 break;
-				 }				 
-				 
+		String assigneeLast = null;
+//		String statusCurrentId = issue.getStatusId();
+		List<ChangeHistoryItem> transitionStatusChHistory = ComponentAccessor.getChangeHistoryManager().getAllChangeItems(issue);
+		 if (!transitionStatusChHistory.isEmpty()) {			 
+			 for (int j = transitionStatusChHistory.size() - 1; j >= 0 ; j--) {
+				 ChangeHistoryItem transitionStatusChItemBean = transitionStatusChHistory.get(j);		 
+				 if (transitionStatusChItemBean.getField().equalsIgnoreCase(LsaConstant.LSA_ISSUE_CFLD_ASSIGNEE)) {
+					 assigneeLast = transitionStatusChItemBean.getFromValue();
+					 if ( (assigneeLast == null && assigneeCurrentId != null) || (assigneeLast != null && assigneeCurrentId == null) || !assigneeLast.equalsIgnoreCase(assigneeCurrentId)) {						 
+						 break;
+					 }
+				 } 			 
 			 }
-		 }
+		 }	
+		assigneeId = assigneeLast;
 		return assigneeId;
 	}
 

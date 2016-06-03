@@ -11,6 +11,7 @@ import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.issue.MutableIssue;
 import com.atlassian.jira.user.ApplicationUser;
 import com.itzabota.jira.plugins.utils.constant.LsaConstant;
+import com.itzabota.jira.plugins.utils.jira.IssueUtils;
 import com.opensymphony.module.propertyset.PropertySet;
 import com.opensymphony.workflow.WorkflowException;
 
@@ -33,10 +34,14 @@ extends UpdateParameters
 		MutableIssue issue = getIssue(transientVars);			
 		String assigneeId = setAssigneeId();
 		if (assigneeId != null) {
+			ApplicationUser oldAssignee = issue.getAssignee();
+			ApplicationUser newAssignee = ComponentAccessor.getUserManager().getUserByKey(assigneeId);
+
 //			issueInputParameters.setAssigneeId(issue.getAssigneeId());
 			// !!!!!!!!!!!!!!! Обновляем исполнителя по-старому
-			issue.setAssignee(ComponentAccessor.getUserManager().getUserByKey(assigneeId));
+			issue.setAssignee(newAssignee);
 			issue.store();
+			IssueUtils.writeHistoryAssignee(issue, oldAssignee, newAssignee);
 		}			
 //		updateIssueAssignee(issue, assigneeId);		
 	}

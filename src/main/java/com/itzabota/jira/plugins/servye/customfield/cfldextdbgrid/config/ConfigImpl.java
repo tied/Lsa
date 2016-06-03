@@ -79,6 +79,8 @@ public class ConfigImpl implements Config {
 				retn = retn.replaceAll("repeat \\(", "repeat(");
 				retn = retn.replaceAll("repeat\\(", "replicate(");
 				retn = retn.replaceAll("current_date", "GETDATE()");
+				retn = retn.replaceAll("\\.FUNCTION", ".\"FUNCTION\"");
+				
 // DATE_ADD(current_date,INTERVAL 1 MONTH) =>				DATEADD(MONTH,1, GETDATE ( ))
 			}
 			else

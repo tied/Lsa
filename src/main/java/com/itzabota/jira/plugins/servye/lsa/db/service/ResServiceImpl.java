@@ -23,7 +23,6 @@ import com.itzabota.jira.plugins.servye.customfield.cfldextdbgrid.config.ConfigI
 import com.itzabota.jira.plugins.servye.lsa.db.model.Employee;
 import com.itzabota.jira.plugins.servye.lsa.db.model.Res;
 import com.itzabota.jira.plugins.servye.lsa.db.model.Ress;
-import com.itzabota.jira.plugins.utils.constant.LsaConstant;
 import com.itzabota.jira.plugins.utils.db.DBUtils;
 import com.itzabota.jira.plugins.utils.lsa.LsaUtils;
 
@@ -43,25 +42,28 @@ public class ResServiceImpl {
 			+ "A0.ResourceType as TYPE "			
 			+ "FROM jira_tab_resources A0 "
 			+ "LEFT JOIN jira_tab_resources A1 "
-			+ "ON SUBSTRING(A0.Structural_code, 1, 10) = SUBSTRING(A1.Structural_code, 1, 10) "
-			+ "AND len(A1.Structural_code) = 10 "
+			+ "ON <SCHEMA_NAME>.SPLIT_STR(A0.Structural_code, '.', 1) = <SCHEMA_NAME>.SPLIT_STR(A1.Structural_code, '.', 1) "
+			+ "AND <SCHEMA_NAME>.SPLIT_STR(A1.Structural_code, '.', 2) = '' "
 			+ "LEFT JOIN jira_tab_resources A2 "
-			+ "ON SUBSTRING(A0.Structural_code, 1, 21) = SUBSTRING(A2.Structural_code, 1, 21) "
-			+ "AND len(A2.Structural_code) = 21 "
+			+ "ON <SCHEMA_NAME>.SPLIT_STR(A0.Structural_code, '.', 1)+'.'+<SCHEMA_NAME>.SPLIT_STR(A0.Structural_code, '.', 2) = <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 1)+'.'+<SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 2) "
+			+ "AND <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 2) != '' "
+			+ "AND <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 3) = '' "
 			+ "LEFT JOIN jira_tab_resources A3 "
-			+ "ON SUBSTRING(A0.Structural_code, 1, 32) = SUBSTRING(A3.Structural_code, 1, 32) "
-			+ "AND len(A3.Structural_code) = 32 "
-			+ ") AS Q1 LEFT JOIN ("
-			+ "SELECT A01.Structural_code AS CD_STR "
-			+ "FROM jira_tab_resources A01 "
-			+ "INNER JOIN jira_tab_accesshistory H "
-			+ "ON H.Structural_code=A01.Structural_code "
-			+ "AND H.ID_Employee = <ID_Employee> "
-			+ "AND H.Date_end > "
-			+ LsaUtils.SQLAddDateParseDateValue(LsaConstant.LSA_RESOURCECONTINUE_INTERVAL)
-			+ ") AS Q2 "
-			+ "ON Q1.CD_STR = Q2.CD_STR "
-			+ "WHERE Q2.CD_STR IS NULL "
+			+ "ON A0.Structural_code = A3.Structural_code "
+			+ "AND <SCHEMA_NAME>.SPLIT_STR(A3.Structural_code, '.', 2) != '' "
+			+ "AND <SCHEMA_NAME>.SPLIT_STR(A3.Structural_code, '.', 3) != '' "
+			+ ") AS Q1 "
+//			+ "LEFT JOIN ("
+//			+ "SELECT A01.Structural_code AS CD_STR "
+//			+ "FROM jira_tab_resources A01 "
+//			+ "INNER JOIN jira_tab_accesshistory H "
+//			+ "ON H.Structural_code=A01.Structural_code "
+//			+ "AND H.ID_Employee = <ID_Employee> "
+//			+ "AND H.Date_end > "
+//			+ LsaUtils.SQLAddDateParseDateValue(LsaConstant.LSA_RESOURCECONTINUE_INTERVAL)
+//			+ ") AS Q2 "
+//			+ "ON Q1.CD_STR = Q2.CD_STR "
+//			+ "WHERE Q2.CD_STR IS NULL "
 			+ "ORDER BY Q1.CD_STR";	
 	
 	@Inject
@@ -75,13 +77,7 @@ public class ResServiceImpl {
 	public Ress getAll(String issueKey) {
 		IssueManager issueManager = ComponentAccessor.getIssueManager();
 		MutableIssue issue = issueManager.getIssueObject(issueKey);
-		ApplicationUser appUser = null;
-		if (issue.isSubTask()) {
-			appUser = issue.getParentObject().getReporter();
-		}
-		else {
-			appUser = issue.getReporter();
-		}	
+		ApplicationUser appUser = LsaUtils.getRecipient(issue);
 		Employee employee = null;
 		if (appUser != null) {
 			employee = employeeServiceImpl.getByLogin(appUser.getUsername());
@@ -94,6 +90,7 @@ public class ResServiceImpl {
 				Statement stmt = conn.createStatement();
 				) {
 			String sql = sqlQuery.replaceAll("<".concat("ID_Employee").concat(">"), String.valueOf(employee.getId()));
+			sql = sql.replaceAll("<".concat("SCHEMA_NAME").concat(">"), config.getMappingDbJiraFld().getMappingDbJiraFld().get(0).getdBSchemaName());			
 			log.info(ConfigImpl.modiSqlOnDriverName(sql));
 			rs = stmt.executeQuery(ConfigImpl.modiSqlOnDriverName(sql));
 			List<List<Object>> listObj = DBUtils.getSqlRez(rs);

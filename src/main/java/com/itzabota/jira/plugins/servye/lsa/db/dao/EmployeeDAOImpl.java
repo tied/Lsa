@@ -48,12 +48,17 @@ public class EmployeeDAOImpl implements TblDAO<Employee> {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Employee> cq = cb.createQuery(Employee.class);
         Root<Employee> rootEntry = cq.from(Employee.class);
-        ParameterExpression<String> p = cb.parameter(String.class);    
+        ParameterExpression<String> p = cb.parameter(String.class);  
+        ParameterExpression<Integer> z = cb.parameter(Integer.class);
         CriteriaQuery<Employee> all = cq.select(rootEntry).where(
-        	  cb.equal(rootEntry.get(fld), p)
+        		cb.and(
+        	  cb.equal(rootEntry.get(fld), p),
+        	  cb.equal(rootEntry.get("isActive"), z))
         	);  
-        TypedQuery<Employee> allQuery = em.createQuery(all);         
-        allQuery.setParameter(p, fldVal);
+        TypedQuery<Employee> allQuery = em.createQuery(all);
+        // Ищем в верхнем регистре!
+        String fldValDB = fldVal.toUpperCase();
+        allQuery.setParameter(p, fldValDB).setParameter(z, 0);
         if (allQuery.getResultList() != null && allQuery.getResultList().size() > 0) {
         	employee = allQuery.getResultList().get(0);
         }        

@@ -9,6 +9,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -57,6 +59,9 @@ public class Employee implements Serializable {
 	@XmlElement
 	private int isActive;	
 	
+	@XmlElement
+	private Department dptcod;	
+
 	@Id
 //	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID")
@@ -110,6 +115,16 @@ public class Employee implements Serializable {
 		this.loginMng = loginMng;
 	}
 	
+	@ManyToOne
+	@JoinColumn(name="department_code", referencedColumnName="department_code")	
+	public Department getDptcod() {
+		return dptcod;
+	}
+
+	public void setDptcod(Department dptcod) {
+		this.dptcod = dptcod;
+	}	
+	
 	@Column(name = "In_state")
 	public int getIsShtat() {
 		return isShtat;
@@ -135,6 +150,7 @@ public class Employee implements Serializable {
 		return resourceIssues;
 	}
 	
+	
 
 	@XmlElement(name = "multiAccessApprove")
 	private final List<AccessApprove> accessApproves = new ArrayList<AccessApprove>();
@@ -149,7 +165,7 @@ public class Employee implements Serializable {
 	}
 	
 	public Employee(Long id, Timestamp ts, String login, 
-			String fio, String desc, String loginMng, int isActive) {
+			String fio, String desc, String loginMng, int isActive, Department dptcod) {
 		this.id = id;
 		this.ts = ts;
 		this.login = login;
@@ -157,5 +173,6 @@ public class Employee implements Serializable {
 		this.desc = desc;
 		this.loginMng = loginMng;
 		this.isActive = isActive;
+		this.dptcod = dptcod;
 	}
 }

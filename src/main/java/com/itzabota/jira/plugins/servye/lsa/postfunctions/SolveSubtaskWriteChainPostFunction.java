@@ -19,8 +19,6 @@ import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.IssueInputParameters;
 import com.atlassian.jira.issue.IssueInputParametersImpl;
 import com.atlassian.jira.issue.MutableIssue;
-import com.atlassian.jira.security.roles.ProjectRole;
-import com.atlassian.jira.security.roles.ProjectRoleManager;
 import com.atlassian.jira.user.ApplicationUser;
 import com.atlassian.jira.workflow.function.issue.AbstractJiraFunctionProvider;
 import com.itzabota.jira.plugins.servye.customfield.cfldextdbgrid.config.Config;
@@ -36,6 +34,7 @@ import com.itzabota.jira.plugins.servye.lsa.db.service.ResTpServiceImpl;
 import com.itzabota.jira.plugins.servye.lsa.db.service.ResourceServiceImpl;
 import com.itzabota.jira.plugins.utils.constant.LsaConstant;
 import com.itzabota.jira.plugins.utils.jira.IssueUtils;
+import com.itzabota.jira.plugins.utils.lsa.LsaUtils;
 import com.opensymphony.module.propertyset.PropertySet;
 import com.opensymphony.workflow.WorkflowException;
 
@@ -167,12 +166,14 @@ public class SolveSubtaskWriteChainPostFunction extends AbstractJiraFunctionProv
 			
 //			String body = getComment(resolution);
 //			ComponentAccessor.getCommentManager().create(issue, issue.getReporter(), body, false);
+			ApplicationUser oldAssignee = issue.getAssignee();
+			ApplicationUser newAssignee = ComponentAccessor.getUserManager().getUserByKey(assigneeNext);
 			if (!isFin) {
 				UpdateParameters.updateIssueAssignee(issue, assigneeNext);	
 				if (assigneeNext != null) {
 //					issueInputParameters.setAssigneeId(issue.getAssigneeId());
-					// !!!!!!!!!!!!!!! Обновляем исполнителя по-старому					
-					issue.setAssignee(ComponentAccessor.getUserManager().getUserByKey(assigneeNext));
+					// !!!!!!!!!!!!!!! Обновляем исполнителя по-старому			
+					issue.setAssignee(newAssignee);
 					issue.store();
 				}					
 			}
@@ -184,15 +185,15 @@ public class SolveSubtaskWriteChainPostFunction extends AbstractJiraFunctionProv
 				issueInputParameters.setAssigneeId(assigneeNext);
 				IssueUtils.transitionIssue(ComponentAccessor.getUserManager().getUserByName(LsaConstant.LSA_USER_MANAGER_DEFAULT), LsaConstant.LSA_ISSUE_WORKFLOW_ACTION_SOLVEFIN, 
 						issue, issueInputParameters);	
-				issue.setAssignee(ComponentAccessor.getUserManager().getUserByKey(assigneeNext));
-				issue.store();	
+				issue.setAssignee(newAssignee);
 				issue.setStatusId(IssueUtils.getIssueStatusByIssueStatusName(issue, LsaConstant.LSA_ISSUE_WORKFLOW_ACTION_SOLVED).getId());
 				issue.store();
 				// Проверка, если все сабтаски решены или решени fin, то перевести основную заявку в статус решена
 				if (canSolveIssue()) {
 					solveIssue();
 				}
-			}				
+			}	
+			IssueUtils.writeHistoryAssignee(issue, oldAssignee, newAssignee);			
 			trans.commit();
 		}
 		catch (RuntimeException re)
@@ -208,10 +209,10 @@ public class SolveSubtaskWriteChainPostFunction extends AbstractJiraFunctionProv
 	
 	protected void solveIssue() {
 		MutableIssue issueMain = ComponentAccessor.getIssueManager().getIssueObject(issue.getParentId());
-		issueMain.setAssignee(ComponentAccessor.getUserManager().getUserByKey((issueMain.getReporterId())));
+		issueMain.setAssignee(LsaUtils.getRecipient(issueMain));
 		issueMain.store();		
 		IssueInputParameters issueInputParameters = new IssueInputParametersImpl();
-		issueInputParameters.setAssigneeId(issueMain.getReporterId());				
+		issueInputParameters.setAssigneeId(LsaUtils.getRecipient(issueMain).getKey());				
 		IssueUtils.transitionIssue(ComponentAccessor.getUserManager().getUserByName(LsaConstant.LSA_USER_MANAGER_DEFAULT), LsaConstant.LSA_ISSUE_WORKFLOW_ACTION_SOLVE, 
 				issueMain, issueInputParameters);
 		issueMain.setStatusId(IssueUtils.getIssueStatusByIssueStatusName(issue, LsaConstant.LSA_ISSUE_WORKFLOW_ACTION_SOLVED).getId());
