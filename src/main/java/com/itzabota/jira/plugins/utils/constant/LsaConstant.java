@@ -155,22 +155,22 @@ public class LsaConstant {
 	}
 
 	@XmlElement
-	public static  String LSA_ISSUE_TYPE_TASK = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issueTypeTask.name");
+	public static  String LSA_ISSUE_TYPE_TASK = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issueTypeTask.name").trim();
 	
 	@XmlElement
-	public static  String LSA_ISSUE_TYPE_SUB_TASK = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issueTypeSubTask.name");
+	public static  String LSA_ISSUE_TYPE_SUB_TASK = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issueTypeSubTask.name").trim();
 	
 	@XmlElement
-	public static  String LSA_ROLE_PROJECT_COORDINATOR = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.role.project.coordinator");
+	public static  String LSA_ROLE_PROJECT_COORDINATOR = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.role.project.coordinator").trim();
 	
 	@XmlElement
-	public static  String LSA_ROLE_PROJECT_MANAGER = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.role.project.manager");
+	public static  String LSA_ROLE_PROJECT_MANAGER = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.role.project.manager").trim();
 	
 	@XmlElement
-	public static  String LSA_ROLE_ADMINISTRATOR = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.role.project.administrator");
+	public static  String LSA_ROLE_ADMINISTRATOR = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.role.project.administrator").trim();
 	
 	@XmlElement
-	public static  List<String> LSA_RESOURCE_ROLES = new ArrayList<String>(Arrays.asList(UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.resource.roles").split(","))) ;
+	public static  List<String> LSA_RESOURCE_ROLES = new ArrayList<String>(Arrays.asList(UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.resource.roles").trim().split(","))) ;
 	
 	
 	
@@ -201,16 +201,16 @@ public class LsaConstant {
 	}
 
 	@XmlElement
-	public static  String LSA_USER_MANAGER_DEFAULT = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.user.managerDefault");
+	public static  String LSA_USER_MANAGER_DEFAULT = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.user.managerDefault").trim();
 	
 	@XmlElement
-	public static  String LSA_ISSUE_STATUS_DEFAULT = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.statusDefault");
+	public static  String LSA_ISSUE_STATUS_DEFAULT = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.statusDefault").trim();
 
 	@XmlElement
-	public static  String LSA_ISSUE_STATUS_NEW = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.status.new");
+	public static  String LSA_ISSUE_STATUS_NEW = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.status.new").trim();
 
 	@XmlElement
-	public static  String LSA_ISSUE_STATUS_ARCHIVE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.status.archive");
+	public static  String LSA_ISSUE_STATUS_ARCHIVE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.status.archive").trim();
 
 	public static String getLSA_ISSUE_STATUS_NEW() {
 		return LSA_ISSUE_STATUS_NEW;
@@ -237,13 +237,13 @@ public class LsaConstant {
 	}
 	
 	@XmlElement
-	public static  String LSA_ISSUE_WORKFLOW_ACTION_WAITINGPROCESS1 = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.waitingProcess1");		
+	public static  String LSA_ISSUE_WORKFLOW_ACTION_WAITINGPROCESS1 = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.waitingProcess1").trim();		
 
 	@XmlElement
-	public static  String LSA_ISSUE_WORKFLOW_ACTION_VERIFIED = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.verified");		
+	public static  String LSA_ISSUE_WORKFLOW_ACTION_VERIFIED = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.verified").trim();		
 
 	@XmlElement
-	public static  String LSA_ISSUE_WORKFLOW_ACTION_EDIT = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.edit");		
+	public static  String LSA_ISSUE_WORKFLOW_ACTION_EDIT = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.edit").trim();		
 
 	
 	public static String getLSA_ISSUE_WORKFLOW_ACTION_EDIT() {
@@ -256,7 +256,7 @@ public class LsaConstant {
 	}
 
 	@XmlElement
-	public static  String LSA_ISSUE_WORKFLOW_ACTION_OPEN = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.open");		
+	public static  String LSA_ISSUE_WORKFLOW_ACTION_OPEN = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.open").trim();		
 
 	public static String getLSA_ISSUE_WORKFLOW_ACTION_OPEN() {
 		return LSA_ISSUE_WORKFLOW_ACTION_OPEN;
@@ -268,7 +268,7 @@ public class LsaConstant {
 	}
 
 	@XmlElement
-	public static  String LSA_ISSUE_WORKFLOW_ACTION_SOLVE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.solve");		
+	public static  String LSA_ISSUE_WORKFLOW_ACTION_SOLVE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.solve").trim();		
 
 	public static String getLSA_ISSUE_WORKFLOW_ACTION_WAITINGPROCESS1() {
 		return LSA_ISSUE_WORKFLOW_ACTION_WAITINGPROCESS1;
@@ -307,10 +307,10 @@ public class LsaConstant {
 	}
 
 	@XmlElement
-	public static  String LSA_ISSUE_WORKFLOW_ACTION_SOLVED = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.solved");		
+	public static  String LSA_ISSUE_WORKFLOW_ACTION_SOLVED = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.solved").trim();		
 
 	@XmlElement
-	public static  String LSA_ISSUE_WORKFLOW_ACTION_APPROVED = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.approved");		
+	public static  String LSA_ISSUE_WORKFLOW_ACTION_APPROVED = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.approved").trim();		
 	
 	public static String getLSA_ISSUE_WORKFLOW_ACTION_REJECTED() {
 		return LSA_ISSUE_WORKFLOW_ACTION_REJECTED;
@@ -330,9 +330,9 @@ public class LsaConstant {
 		LSA_ISSUE_WORKFLOW_ACTION_CLOSED = lSA_ISSUE_WORKFLOW_ACTION_CLOSED;
 	}
 
-	public static  String LSA_ISSUE_WORKFLOW_ACTION_REJECTED = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.rejected");
+	public static  String LSA_ISSUE_WORKFLOW_ACTION_REJECTED = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.rejected").trim();
 	
-	public static  String LSA_ISSUE_WORKFLOW_ACTION_CLOSED = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.closed");
+	public static  String LSA_ISSUE_WORKFLOW_ACTION_CLOSED = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.closed").trim();
 
 	
 	public static String getLSA_ISSUE_WORKFLOW_ACTION_APPROVED() {
@@ -345,10 +345,10 @@ public class LsaConstant {
 	}
 
 	@XmlElement
-	public static  String LSA_ISSUE_WORKFLOW_ACTION_APPROVEFIN = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.approveFin");		
+	public static  String LSA_ISSUE_WORKFLOW_ACTION_APPROVEFIN = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.approveFin").trim();		
 
 	@XmlElement
-	public static  String LSA_ISSUE_WORKFLOW_ACTION_SOLVEFIN = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.solveFin");		
+	public static  String LSA_ISSUE_WORKFLOW_ACTION_SOLVEFIN = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.workflow.action.solveFin").trim();		
 	
 	
 	public static String getLSA_ISSUE_WORKFLOW_ACTION_APPROVEFIN() {
@@ -370,10 +370,10 @@ public class LsaConstant {
 	}
 
 	@XmlElement
-	public static  String LSA_ISSUE_STATUS_SUCCEED = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.status.succeed");
+	public static  String LSA_ISSUE_STATUS_SUCCEED = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.status.succeed").trim();
 
 	@XmlElement
-	public static  String LSA_ISSUE_STATUS_CONTINUE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.status.continue");
+	public static  String LSA_ISSUE_STATUS_CONTINUE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.status.continue").trim();
 
 	public static String getLSA_ISSUE_STATUS_CONTINUE() {
 		return LSA_ISSUE_STATUS_CONTINUE;
@@ -384,10 +384,10 @@ public class LsaConstant {
 	}
 
 	@XmlElement
-	public static  String LSA_ISSUE_SUMMARY_TEMPLATE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.summary.template");
+	public static  String LSA_ISSUE_SUMMARY_TEMPLATE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.summary.template").trim();
 
 	@XmlElement
-	public static  String LSA_ISSUE_COMMENT_TEMPLATE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.comment.template");	
+	public static  String LSA_ISSUE_COMMENT_TEMPLATE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.comment.template").trim();	
 
 	
 	public static String getLSA_ISSUE_COMMENT_TEMPLATE() {
@@ -400,7 +400,7 @@ public class LsaConstant {
 	}
 
 	@XmlElement
-	public static  String LSA_SUBTASK_COMMENT_TEMPLATE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.subtask.comment.template");	
+	public static  String LSA_SUBTASK_COMMENT_TEMPLATE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.subtask.comment.template").trim();	
 
 	
 
@@ -414,9 +414,8 @@ public class LsaConstant {
 	}
 
 	@XmlElement
-	public static  String LSA_ISSUE_CFLD_ASSIGNEE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.fld.assignee");
-	
-	
+	public static  String LSA_ISSUE_CFLD_ASSIGNEE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.fld.assignee").trim();
+
 	public static String getLSA_ISSUE_CFLD_ASSIGNEE() {
 		return LSA_ISSUE_CFLD_ASSIGNEE;
 	}
@@ -426,10 +425,23 @@ public class LsaConstant {
 	}
 
 	@XmlElement
-	public static  String LSA_ISSUE_CFLD_DEPT = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.cfld.dept");
+	public static  String LSA_ISSUE_CFLD_FIO = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.cfld.fio").trim();
+
+	
+
+	public static String getLSA_ISSUE_CFLD_FIO() {
+		return LSA_ISSUE_CFLD_FIO;
+	}
+
+	public static void setLSA_ISSUE_CFLD_FIO(String lSA_ISSUE_CFLD_FIO) {
+		LSA_ISSUE_CFLD_FIO = lSA_ISSUE_CFLD_FIO;
+	}
 
 	@XmlElement
-	public static  String LSA_ISSUE_CFLD_AGREEMENTLINK = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.cfld.agreementLink");
+	public static  String LSA_ISSUE_CFLD_DEPT = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.cfld.dept").trim();
+
+	@XmlElement
+	public static  String LSA_ISSUE_CFLD_AGREEMENTLINK = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.cfld.agreementLink").trim();
 
 	
 	
@@ -443,7 +455,7 @@ public class LsaConstant {
 	}
 
 	@XmlElement
-	public static  String LSA_ISSUE_CFLD_RESOURCE_BEGIN = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.cfld.resourceBegin");
+	public static  String LSA_ISSUE_CFLD_RESOURCE_BEGIN = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.cfld.resourceBegin").trim();
 
 	public static String getLSA_ISSUE_CFLD_RESOURCE_BEGIN() {
 		return LSA_ISSUE_CFLD_RESOURCE_BEGIN;
@@ -464,13 +476,13 @@ public class LsaConstant {
 	}
 
 	@XmlElement
-	public static  String LSA_ISSUE_CFLD_RESOURCE_END = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.cfld.resourceEnd");
+	public static  String LSA_ISSUE_CFLD_RESOURCE_END = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.cfld.resourceEnd").trim();
 
 	@XmlElement
-	public static  String LSA_RESOURCEEND_INTERVAL = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.resourceEnd.interval");
+	public static  String LSA_RESOURCEEND_INTERVAL = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.resourceEnd.interval").trim();
 
 	@XmlElement
-	public static  String LSA_RESOURCECONTINUE_INTERVAL = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.resourceContinue.interval");
+	public static  String LSA_RESOURCECONTINUE_INTERVAL = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.resourceContinue.interval").trim();
 
 	public static String getLSA_RESOURCEEND_INTERVAL() {
 		return LSA_RESOURCEEND_INTERVAL;
@@ -502,16 +514,16 @@ public class LsaConstant {
 	}
 
 	@XmlElement
-	public static  String LSA_DB_STATUS_ACTIVE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.db.status.active");
+	public static  String LSA_DB_STATUS_ACTIVE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.db.status.active").trim();
 
 	@XmlElement
-	public static  String LSA_FORM_RESTP_TEMPLATE_DEFAULT = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.form.ResTP.template.default");
+	public static  String LSA_FORM_RESTP_TEMPLATE_DEFAULT = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.form.ResTP.template.default").trim();
 
 	@XmlElement
-	public static  String LSA_ISSUE_CFLD_AGREEMENT_LINK_VALUE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.cfld.agreement.link.value");
+	public static  String LSA_ISSUE_CFLD_AGREEMENT_LINK_VALUE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.cfld.agreement.link.value").trim();
 	
 	@XmlElement
-	public static  String LSA_ISSUE_CFLD_AGREEMENT_LINK_TITLE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.cfld.agreement.link.title");
+	public static  String LSA_ISSUE_CFLD_AGREEMENT_LINK_TITLE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.cfld.agreement.link.title").trim();
 
 	public static String getLSA_ISSUE_CFLD_AGREEMENT_LINK_VALUE() {
 		return LSA_ISSUE_CFLD_AGREEMENT_LINK_VALUE;
@@ -532,13 +544,13 @@ public class LsaConstant {
 	}
 
 	@XmlElement
-	public static  String LSA_ISSUE_CFLD_DEPT_DEFAULT = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.cfld.dept.default");
+	public static  String LSA_ISSUE_CFLD_DEPT_DEFAULT = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.cfld.dept.default").trim();
 
 	@XmlElement
-	public static  String LSA_ISSUE_RESOLUTION_DONE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.resolution.done");
+	public static  String LSA_ISSUE_RESOLUTION_DONE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.resolution.done").trim();
 
 	@XmlElement
-	public static  String LSA_ISSUE_RESOLUTION_APPROVE_VALUE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.resolution.approve.value");
+	public static  String LSA_ISSUE_RESOLUTION_APPROVE_VALUE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.resolution.approve.value").trim();
 
 	public static String getLSA_ISSUE_RESOLUTION_APPROVE_VALUE() {
 		return LSA_ISSUE_RESOLUTION_APPROVE_VALUE;
@@ -559,7 +571,7 @@ public class LsaConstant {
 	}
 
 	@XmlElement
-	public static  String LSA_ISSUE_RESOLUTION_REJECT_VALUE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.resolution.reject.value");
+	public static  String LSA_ISSUE_RESOLUTION_REJECT_VALUE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.resolution.reject.value").trim();
 
 	public static List<String> getLSA_RESOURCE_ROLES() {
 		return LSA_RESOURCE_ROLES;
@@ -587,18 +599,18 @@ public class LsaConstant {
 	}
 
 	@XmlElement
-	public static  String LSA_ISSUE_RESOLUTION_UNDONE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.resolution.undone");
+	public static  String LSA_ISSUE_RESOLUTION_UNDONE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.resolution.undone").trim();
 	
 	
 	@XmlElement
 	
-	public static  List<String> LSA_RESTP_CFLDGRID_NAMES = new ArrayList<String>(Arrays.asList(UserFunc.getProperties(pluginPropertiesName).getProperty("resTp-cfldGrid.name").split(","))) ;
+	public static  List<String> LSA_RESTP_CFLDGRID_NAMES = new ArrayList<String>(Arrays.asList(UserFunc.getProperties(pluginPropertiesName).getProperty("resTp-cfldGrid.name").trim().split(","))) ;
 	
 	@XmlElement
-	public static  String issueSummaryFio = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.summary.template.fio");
+	public static  String issueSummaryFio = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.summary.template.fio").trim();
 
 	@XmlElement
-	public static  String issueSummaryResolution = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.summary.template.resolution");
+	public static  String issueSummaryResolution = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.summary.template.resolution").trim();
 
 	public static String getIssueSummaryResolution() {
 		return issueSummaryResolution;
@@ -625,14 +637,14 @@ public class LsaConstant {
 	}
 
 	@XmlElement
-	public static  String issueSummaryUser = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.summary.template.user");
+	public static  String issueSummaryUser = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.summary.template.user").trim();
 
 	@XmlElement
-	public static  String issueSummaryRole = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.summary.template.role");
+	public static  String issueSummaryRole = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.summary.template.role").trim();
 
 	
 	@XmlElement
-	public static  String LSA_SUBTASK_SUMMARY_TEMPLATE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.subtask.summary.template");
+	public static  String LSA_SUBTASK_SUMMARY_TEMPLATE = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.subtask.summary.template").trim();
 
 
 	public static String getLSA_SUBTASK_SUMMARY_TEMPLATE() {
@@ -645,7 +657,7 @@ public class LsaConstant {
 	}
 
 	@XmlElement
-	public static  String issueSummaryResource = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.summary.template.resource");
+	public static  String issueSummaryResource = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.summary.template.resource").trim();
 	
 	
 	public static String getIssueSummaryResource() {
@@ -657,10 +669,10 @@ public class LsaConstant {
 	}
 
 	@XmlElement
-	public static  String issueSummaryDept = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.summary.template.dept");
+	public static  String issueSummaryDept = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.issue.summary.template.dept").trim();
 	
 	@XmlElement
-	public static  String LSA_PROJECT_NAME = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.project.name");
+	public static  String LSA_PROJECT_NAME = UserFunc.getProperties(pluginPropertiesName).getProperty("lsa.project.name").trim();
 
 	public static String getLSA_PROJECT_NAME() {
 		return LSA_PROJECT_NAME;
