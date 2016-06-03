@@ -64,7 +64,8 @@
                         </div>
                         <!-- Hint text is rendered on the left of the footer -->
                     </footer>
-                </section>					
+                </section>
+				<div class="aui-message-info fadeout" id="message-form-valid-info"></div>						
 				<!--Информационные системы. Форма-->
 				<section role="dialog" id="insert-dialog-resTp1" class="aui-layer aui-dialog2 aui-dialog2-large" aria-hidden="true">
 					<!-- dialog2 header -->
@@ -389,7 +390,7 @@
 								<a href="#tabs-resTp2">Оборудование</a>
 							</li>
 							<li id="tabs-li-resTp3" class="menu-item">
-								<a href="#tabs-resTp3">Другие фунции</a>
+								<a href="#tabs-resTp3">Дополнительные функции</a>
 							</li>			
 							<li id="tabs-li-resTp4" class="menu-item">
 								<a href="#tabs-resTp4">Витрина данных</a>
