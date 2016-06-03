@@ -46,6 +46,9 @@ public class TstConfig {
 		AccessStatusDAOImpl accessStatusDAOImpl = new AccessStatusDAOImpl();
 		AccessStatusServiceImpl accessStatusServiceImpl = new AccessStatusServiceImpl(config, accessStatusDAOImpl);
 		
+		EmployeeDAOImpl employeeDAOImpl = new EmployeeDAOImpl();
+		EmployeeServiceImpl employeeServiceImpl = new EmployeeServiceImpl(config, employeeDAOImpl);
+		
 //		ResourceDAOImpl resourceDAOImpl = new ResourceDAOImpl();
 //		ResourceServiceImpl resourceServiceImpl = new ResourceServiceImpl(config, resourceDAOImpl);
 		ResourceIssueDAOImpl resourceIssueDAOImpl = new ResourceIssueDAOImpl(accessStatusDAOImpl);
@@ -61,7 +64,8 @@ public class TstConfig {
 //		EmployeeServiceImpl employeeServiceImpl = new EmployeeServiceImpl(config, employeeDAOImpl);		
 //		AccessHistoryDAOImpl accessHistoryDAOImpl = new AccessHistoryDAOImpl(accessStatusDAOImpl);
 //		String cdStr = "0000000006";
-//		Employee employeeObj = new Employee();
+		Employee employeeObj = employeeServiceImpl.getByLogin("Vital");
+		System.out.println(employeeObj.getId());
 //		employeeObj.setId(2L);
 //		EntityManager em = config.getDBConfigOrm().getFactory().createEntityManager();
 //		
