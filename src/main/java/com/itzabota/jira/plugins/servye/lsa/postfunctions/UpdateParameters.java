@@ -10,6 +10,7 @@ import com.atlassian.jira.component.ComponentAccessor;
 import com.atlassian.jira.issue.IssueInputParameters;
 import com.atlassian.jira.issue.IssueInputParametersImpl;
 import com.atlassian.jira.issue.MutableIssue;
+import com.atlassian.jira.user.ApplicationUser;
 import com.atlassian.jira.workflow.function.issue.AbstractJiraFunctionProvider;
 import com.itzabota.jira.plugins.utils.jira.IssueUtils;
 
@@ -24,10 +25,13 @@ public abstract class UpdateParameters extends AbstractJiraFunctionProvider  {
 		IssueInputParameters issueInputParameters = new IssueInputParametersImpl();		
 		boolean toDo = false;
 		if (assigneeId != null) {
+			ApplicationUser oldAssignee = issue.getAssignee();
+			ApplicationUser newAssignee = ComponentAccessor.getUserManager().getUserByKey(assigneeId);
 //			issueInputParameters.setAssigneeId(issue.getAssigneeId());
 			// !!!!!!!!!!!!!!! Обновляем исполнителя по-старому
-			issue.setAssignee(ComponentAccessor.getUserManager().getUserByKey(assigneeId));
+			issue.setAssignee(newAssignee);
 			issue.store();
+			IssueUtils.writeHistoryAssignee(issue, oldAssignee, newAssignee);
 			updatedIssue = issue;
 		}	
 //		if (assigneeId != null) {
@@ -47,10 +51,14 @@ public abstract class UpdateParameters extends AbstractJiraFunctionProvider  {
 		IssueInputParameters issueInputParameters = new IssueInputParametersImpl();		
 		boolean toDo = false;
 		if (assigneeId != null) {
+			ApplicationUser oldAssignee = issue.getAssignee();
+			ApplicationUser newAssignee = ComponentAccessor.getUserManager().getUserByKey(assigneeId);
+
 //			issueInputParameters.setAssigneeId(issue.getAssigneeId());
 			// !!!!!!!!!!!!!!! Обновляем исполнителя по-старому
-			issue.setAssignee(ComponentAccessor.getUserManager().getUserByKey(assigneeId));
+			issue.setAssignee(newAssignee);
 			issue.store();
+			IssueUtils.writeHistoryAssignee(issue, oldAssignee, newAssignee);
 		}			
 //		if (assigneeId != null && (issue.getAssignee() == null)) {
 //			issueInputParameters.setAssigneeId(assigneeId);

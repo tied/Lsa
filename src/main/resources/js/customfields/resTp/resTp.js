@@ -34,6 +34,65 @@ CfldGrid.TblBase.prototype.insertHtmlTable = function() {
 	CfldGrid.Base.filterTblDataStatus(CfldGrid.Vars.filterStatusCurCl);		
 }	
 
+// Событие при выборе элемента из списка в Select'е. Переприсваивание подчиненных элементов дочернего списка
+CfldGrid.Base.onChangeFormListEl = function(e, customParameter) {
+	if (customParameter == undefined && typeof e == 'string') {
+		var customParameter = e;
+	}
+	var obj1 = customParameter.split(";");
+	var val = document.getElementById(obj1[0]).value;
+	var tblNameForeign = obj1[1];
+	var el = document.getElementById(obj1[3]);
+	var fltObjSrc = obj1[2].split("=")[0].split(".");
+	var fltObjTrg = obj1[2].split("=")[1].split(".");
+	for(j = el.options.length - 1 ; j >= 0 ; j--)
+	{
+		el.remove(j);
+	}
+	//levelType.name=Level.levelType.name
+	var arVal = CfldGrid[CfldGrid.Constant.objBaseBegin+tblNameForeign].data;
+	var arValCur = null;
+	for (var t = 0; t < arVal.length; t++) {
+		if (arVal[t][CfldGrid.Constant.fldName] == val) {
+			arValCur = arVal[t];
+			for (var h = 0; h < fltObjSrc.length; h++) {
+				arValCur = arValCur[fltObjSrc[h]];
+			}
+		}
+	}	
+	if (arValCur != null ) {
+		arVal = CfldGrid[CfldGrid.Constant.objBaseBegin+fltObjTrg[0]].data;
+		var arValCur2 = null;
+		for (var q = 0; q < arVal.length; q++) {
+			arValCur2 = arVal[q];
+			for (var h = 1; h < fltObjTrg.length; h++) {
+				arValCur2 = arValCur2[fltObjTrg[h]];
+			}
+			if (arValCur == arValCur2) {
+				if (CfldGrid.Base.getNameFromResTpTbl(arVal[q][CfldGrid.Constant.fldId])) {
+					continue;
+				}				
+				var option = document.createElement("option");
+				option.value = arVal[q][CfldGrid.Constant.fldName];
+				option.text = arVal[q][CfldGrid.Constant.fldName];
+				el.appendChild(option);		
+			}
+		}
+	}
+	if (obj1[4] != undefined) {
+		var elEnd = document.getElementById(obj1[4]);
+		if (elEnd.onchange != null) {
+			elEnd.onchange();
+		}	
+	}
+	if (obj1[5] != undefined) {
+		var elEnd2 = document.getElementById(obj1[5]);
+		if (elEnd2.onchange != null) {
+			elEnd2.onchange();
+		}	
+	}	
+}
+
 //Базовая таблица. Перезаполнение внутренних dropdown'ов
 CfldGrid.TblBase.prototype.formForeignTblNameRefill = function () {
 	var arFld = this.curStrArMeta.fields;
@@ -110,13 +169,14 @@ CfldGrid.TblBase.prototype.formForeignTblNameRefill = function () {
 						var formSel = arFld[i][CfldGrid.Constant.formName];
 						el.onchange = CfldGrid.Util.bind(CfldGrid.Base.onChangeFormListEl, null, formSel+";"+tblNameForeign+";"+flt, true);	
 					}	
-					if (this.curClsTblOper == CfldGrid.Constant.operInsert) {
-						var option = document.createElement("option");
-						option.value = "";
-						option.text = "";
-						el.appendChild(option);	
-					}						
-					for (var k = 0; k < ar.length; k++) {
+					var option = document.createElement("option");
+					option.value = "";
+					option.text = "";
+					el.appendChild(option);	
+					for (var k = 0; k < ar.length; k++) { 
+						if (this.curClsTblOper == CfldGrid.Constant.operInsert && CfldGrid.Base.getNameFromResTpTbl(ar[k][CfldGrid.Constant.fldId])) {
+							continue;
+						}
 						var option = document.createElement("option");
 						option.value = ar[k][CfldGrid.Constant.fldName];
 						option.text = ar[k][CfldGrid.Constant.fldName];
@@ -127,19 +187,6 @@ CfldGrid.TblBase.prototype.formForeignTblNameRefill = function () {
 					el.value = "";	
 				}
 				else {
-				/*
-					var expr1 = arFld[i][CfldGrid.Constant.fldId].match(/\D+/g)[0];
-					
-					if (this.data[0][expr1] != undefined && this.data[0][expr1] != null) {
-						for(j2 = el.options.length - 1 ; j2 >= 0 ; j2--)
-						{
-							if (el.options[j2].value == this.data[0][expr1]) {
-								el.options[j2].selected = "true";
-								break;
-							}
-						}						
-					}
-					*/
 					var expr1 = this[arFld[i][CfldGrid.Constant.fldId]];
 					if (expr1 != undefined && expr1 != null) {
 						for(j2 = el.options.length - 1 ; j2 >= 0 ; j2--)
@@ -149,7 +196,10 @@ CfldGrid.TblBase.prototype.formForeignTblNameRefill = function () {
 								break;
 							}
 						}						
-					}							
+					}
+					else {
+						el.value = "";
+					}					
 				}
 			}		
 		}		
@@ -280,6 +330,23 @@ CfldGrid.TblBase.prototype.updateListConnFields = function () {
 			}
 		}
 	}
+}
+
+// Поиск имени ресурса в таблице
+CfldGrid.Base.getNameFromResTpTbl = function (id) {
+	for (var property in CfldGrid) {
+		if (property.indexOf(CfldGrid.Constant.tblEntityResTpIssue) > -1 && property.match(/\d+/g) != null) {			
+			for (var index = 0; index < CfldGrid[property].data.length; index++) {
+				var dat = CfldGrid[property].data[index];
+				for (var num = 1; num <= CfldGrid.Vars.maxResTp; num++) {
+					if (dat[CfldGrid.Constant.fldCdStr] == id) {
+						return true;
+					}		
+				}				
+			}
+		}		
+	}	
+	return false;
 }
 
 // Базовая таблица. Сервер. Вставка данных в таблицу БД
@@ -574,7 +641,7 @@ AJS.$(document).ready(function() {
 			}			
 		}		
 	});
-
+	
 	for (var index = 1; index <= CfldGrid.Vars.maxResTp; index++) {
 		// Hides the dialog2
 		AJS.$("#dialog-resTp"+index+"-close-button").click(function(e) {
@@ -592,7 +659,8 @@ AJS.$(document).ready(function() {
 			var index2 = e.currentTarget.id.match(/\d+/g); 
 			if (index2 != undefined && index2 != null) {
 				index2 = index2[0];
-				if (CfldGrid.Base.validData(index2)) {
+				var rez = CfldGrid.Base.validData(index2);
+				if (!rez.er) {
 					if (CfldGrid["tblEntityResTp"+index2].curClsTblOper==CfldGrid.Constant.operInsert) {
 						CfldGrid["tblEntityResTp"+index2].insert();
 					}
@@ -600,7 +668,15 @@ AJS.$(document).ready(function() {
 						CfldGrid["tblEntityResTp"+index2].edit();
 					}
 					CfldGrid["tblEntityResTp"+index2].cleanDialog();
-					AJS.dialog2('#insert-dialog-resTp'+index2).hide();									
+					AJS.dialog2('#insert-dialog-resTp'+index2).hide();
+					if (rez.msg) {
+						AJS.messages.generic("#message-form-valid-info", {
+						  title: 'Информационное сообщение',
+						  body: rez.msg,
+						  fadeout: true,
+						  delay: 5000
+						});	
+					}				
 				}
 			}				
 		});		
@@ -657,6 +733,7 @@ AJS.$(document).ready(function() {
 	});	
 	// Общая таблица ресурсов
 	CfldGrid.tblEntityRes.loadData(false);
+	
 	CfldGrid.Base.loadDataResParts(CfldGrid.tblEntityRes);
 	// Общая таблица ресурсов заявки
 	CfldGrid.tblEntityResTp.loadData(false);
@@ -876,10 +953,15 @@ CfldGrid.Base.validData = function(index) {
 		document.getElementById("dialog-form-valid-errors").innerHTML = errors; 
 		AJS.dialog2("#dialog-form-valid").show();		
 	}	
+	var rez = {};
 	if (valid) {
-		valid = CfldGrid.Base.validRest(el1.value, el2.value, el3.value, index);
+		rez = CfldGrid.Base.validRest(el1.value, el2.value, el3.value, index);
+		valid = !rez.er;
 	}
-	return valid;
+	if (!valid) {
+		rez = {er: true};
+	}
+	return rez;
 }
 
 
@@ -1058,7 +1140,7 @@ CfldGrid.Base.validRest = function (resName, modulName, funcName, index0) {
 	var objTbl = {issueKey: CfldGrid.Vars.urlParams["key"], resName: resName, modulName: modulName, funcName: funcName, employeeId: CfldGrid.Vars.employeeId};
 	var restUrl = CfldGrid.Vars.restBaseUrl + "resStatusValid";
 	var index = index0;
-	var valid = true;
+	var rez = {er: true};
 	AJS.$.ajax({
 		type: "POST",
 		url: restUrl , 
@@ -1067,18 +1149,12 @@ CfldGrid.Base.validRest = function (resName, modulName, funcName, index0) {
 		dataType: "json",		
 		success : function(data) {
 			var canApproveResource = data.canApproveResource;
-			if (data.statusName != undefined && data.statusName != null && data.statusName != '') {
+			rez = {er: false};
+			if (canApproveResource && data.statusName != undefined && data.statusName != null && data.statusName != '' && data.statusName != CfldGrid.Constant.statusDefaultName) {
 				var el = document.getElementById("resTp"+index+"Status");
 				el.value = data.statusName;			
-			}
-			if (canApproveResource) {
-				valid = true;						
-			}
-			else {
-				var errors = " Доступы к ресурсу уже были выданы сотруднику до " + data.tsEndStr + " :";
-				document.getElementById("dialog-form-valid-errors").innerHTML = errors; 
-				AJS.dialog2("#dialog-form-valid").show();
-				valid = false;
+				var infos = " Доступ к ресурсу уже был выдан сотруднику до " + data.tsEndStr + " !";
+				rez.msg = infos;
 			}
 		},
 		error : function(jqXHR, textStatus, errorThrown) { 
@@ -1088,7 +1164,7 @@ CfldGrid.Base.validRest = function (resName, modulName, funcName, index0) {
 		},		
 		async: false
 	});
-	return valid;	
+	return rez;	
 };	
 
 // Базовая таблица. Сервер. Слияние данных с таблицей БД

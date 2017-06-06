@@ -18,6 +18,8 @@ import com.atlassian.jira.issue.MutableIssue;
 import com.atlassian.jira.issue.fields.CustomField;
 import com.atlassian.jira.user.ApplicationUser;
 import com.atlassian.jira.workflow.function.issue.AbstractJiraFunctionProvider;
+import com.itzabota.jira.plugins.servye.lsa.db.model.Employee;
+import com.itzabota.jira.plugins.servye.lsa.db.service.EmployeeServiceImpl;
 import com.itzabota.jira.plugins.utils.constant.LsaConstant;
 import com.itzabota.jira.plugins.utils.jira.IssueUtils;
 import com.itzabota.jira.plugins.utils.lsa.LsaUtils;
@@ -31,10 +33,12 @@ extends AbstractJiraFunctionProvider
 {
 	
 	private static final Logger log = LoggerFactory.getLogger(UpdateAfterCreateFunction.class);
+	
+	private EmployeeServiceImpl employeeServiceImpl;
 
 	
-	public UpdateAfterCreateFunction() {
-
+	public UpdateAfterCreateFunction(EmployeeServiceImpl employeeServiceImpl) {
+		this.employeeServiceImpl = employeeServiceImpl;
 	}
 	
 	@Override
@@ -65,9 +69,13 @@ extends AbstractJiraFunctionProvider
 		if (assigneeId != null) {
 //			issueInputParameters.setAssigneeId(issue.getAssigneeId());
 			// !!!!!!!!!!!!!!! Обновляем исполнителя по-старому
-			issue.setAssignee(ComponentAccessor.getUserManager().getUserByKey(assigneeId));
+			ApplicationUser oldAssignee = issue.getAssignee();
+			ApplicationUser newAssignee = ComponentAccessor.getUserManager().getUserByKey(assigneeId);
+
+			issue.setAssignee(newAssignee);
 //			log.info("point 5");
 			issue.store();
+			IssueUtils.writeHistoryAssignee(issue, oldAssignee, newAssignee);
 //			log.info("point 6");
 			updatedIssue = issue;
 		}	
@@ -92,7 +100,7 @@ extends AbstractJiraFunctionProvider
 		Date newDate = calEnd.getTime();
 		tsEndNew = new Timestamp(newDate.getTime());
 //		log.info("point 9");
-		if (tsEndOld == null || tsEndNew == null || !tsEndOld.equals(tsEndNew)) {
+		if (tsEndOld == null) {
 //			log.info("point 10");
 			IssueUtils.saveValue(cfldResDtEnd, issue, tsEndOld, tsEndNew);				
 		}
@@ -111,19 +119,29 @@ extends AbstractJiraFunctionProvider
 	private String bindIssueSummaryTemplate (MutableIssue issue, String expr) {
 		String retn = expr;
 		CustomField cfld = IssueUtils.getCfldByIssueAndCfldName(issue, LsaConstant.LSA_ISSUE_CFLD_DEPT);
-		String val = "";
+		String val = null;
 		if (cfld == null) {
 			val = LsaConstant.LSA_ISSUE_CFLD_DEPT_DEFAULT;
 		}	
 		else {
 			val = cfld.getValueFromIssue(issue);
+		}		
+		ApplicationUser recipient = LsaUtils.getRecipient(issue);	
+		Employee employee = employeeServiceImpl.getByLogin(recipient.getKey().toUpperCase());
+		String dptname = null;
+		if (employee != null) {
+			dptname = employee.getDptcod().getDptname();
 		}
-		if (val != null) {
+		if (dptname == null || dptname.isEmpty()) {
+			dptname = LsaConstant.LSA_ISSUE_CFLD_DEPT_DEFAULT; 
+		}	
+		IssueUtils.saveValue(cfld, issue, val, dptname);
+		if (dptname != null) {
 			retn = retn.replaceAll("\\{".concat(LsaConstant.issueSummaryDept).concat("\\}"), 
-					val);			
+					dptname);			
 		}
 		retn = retn.replaceAll("\\{".concat(LsaConstant.issueSummaryFio).concat("\\}"), 
-				issue.getReporter().getDisplayName());
+				recipient.getDisplayName());			
 		return retn;
 	}
 	

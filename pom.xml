@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.itzabota.jira.plugins.servye</groupId>
     <artifactId>lsa</artifactId>
-    <version>1.0.404.test</version>
+    <version>1.0.440.test</version>
     <organization>
         <name>IT-Zabota</name>
         <url>http://www.it-zabota.com/</url>

@@ -146,7 +146,7 @@
 		<resource type="velocity" name="view" location="templates/postfunctions/rejectSubtask-function-view.vm"/>
 	</workflow-function>
 
-	<workflow-function key="assignPreviousAssigneePostFunction" name="LSA. Assign previous assignee."
+	<workflow-function key="assignPreviousAssigneePostFunction" name="LSA. Assign previous assignee of Worklog."
 	class="com.atlassian.jira.plugin.workflow.WorkflowNoInputPluginFactory">
 		<description>LSA. Assign previous assignee.</description>
 		<function-class>com.itzabota.jira.plugins.servye.lsa.postfunctions.AssignPreviousAssigneePostFunction</function-class>	
@@ -292,6 +292,7 @@
 	<component key="accessApproveDAOImpl" class="com.itzabota.jira.plugins.servye.lsa.db.dao.AccessApproveDAOImpl" />
 	<component key="accessHistoryDAOImpl" class="com.itzabota.jira.plugins.servye.lsa.db.dao.AccessHistoryDAOImpl" />
 	<component key="accessStatusDAOImpl" class="com.itzabota.jira.plugins.servye.lsa.db.dao.AccessStatusDAOImpl" />
+	<component key="departmentDAOImpl" class="com.itzabota.jira.plugins.servye.lsa.db.dao.DepartmentDAOImpl" />
 	<component key="profileDAOImpl" class="com.itzabota.jira.plugins.servye.lsa.db.dao.ProfileDAOImpl" />
 	<component key="resourceDAOImpl" class="com.itzabota.jira.plugins.servye.lsa.db.dao.ResourceDAOImpl" />
 	<component key="resourceIssueDAOImpl" class="com.itzabota.jira.plugins.servye.lsa.db.dao.ResourceIssueDAOImpl" />
@@ -301,6 +302,7 @@
 	<component key="accessApproveServiceImpl" class="com.itzabota.jira.plugins.servye.lsa.db.service.AccessApproveServiceImpl" />
 	<component key="accessHistoryServiceImpl" class="com.itzabota.jira.plugins.servye.lsa.db.service.AccessHistoryServiceImpl" />
 	<component key="accessStatusServiceImpl" class="com.itzabota.jira.plugins.servye.lsa.db.service.AccessStatusServiceImpl" />
+	<component key="departmentServiceImpl" class="com.itzabota.jira.plugins.servye.lsa.db.service.DepartmentServiceImpl" />
 	<component key="profileServiceImpl" class="com.itzabota.jira.plugins.servye.lsa.db.service.ProfileServiceImpl" />
 	<component key="resourceServiceImpl" class="com.itzabota.jira.plugins.servye.lsa.db.service.ResourceServiceImpl" />
 	<component key="resourceIssueServiceImpl" class="com.itzabota.jira.plugins.servye.lsa.db.service.ResourceIssueServiceImpl" />
@@ -323,6 +325,9 @@
 	<rest name="AccessStatus Rest Resource" key="accessStatus-rest-resource" path="/lsa" version="2.0">
 	  <description key="accessStatus-rest-resource.description">AccessStatus Rest Resource Plugin</description>
 	</rest>			
+	<rest name="Department Rest Resource" key="department-rest-resource" path="/lsa" version="2.0">
+	  <description key="department-rest-resource.description">Department Rest Resource Plugin</description>
+	</rest>				
 	<rest name="Profile Rest Resource" key="profile-rest-resource" path="/lsa" version="2.0">
 	  <description key="profile-rest-resource.description">Profile Rest Resource Plugin</description>
 	</rest>			

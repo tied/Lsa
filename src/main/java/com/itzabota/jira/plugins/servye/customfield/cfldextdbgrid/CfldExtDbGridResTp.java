@@ -56,6 +56,7 @@ public abstract class CfldExtDbGridResTp extends BaseCfldExtDbGrid {
 				queryString = queryString.concat(trg);
 			}
 		}
+//		log.error(queryString);
 		return queryString;
 	}
 	
@@ -67,20 +68,23 @@ public abstract class CfldExtDbGridResTp extends BaseCfldExtDbGrid {
 			switch (parameter.getPar()) {
 			case "issueTask":
 				if (issueTask != null && issueTask.getKey() != null) {
-					val = issueTask.getKey();
+					val = "'".concat(issueTask.getKey()).concat("'");
 				}
 				break;
 			case "issueSubTask":
 				if (issueSubTask != null && issueSubTask.getKey() != null) {
-					val = issueSubTask.getKey();
+					val = "'".concat(issueSubTask.getKey()).concat("'");
 				}				
-				break;				
+				break;		
+			case "SCHEMA_NAME":
+				val = jiraFldMap.getdBSchemaName();				
+				break;					
 			default:
 				val = parameter.getVal();
 				break;
 			}	
 			if (!val.isEmpty()) {
-				trg = trg.replaceAll("<".concat(parameter.getPar()).concat(">"), "'".concat(val).concat("'"));
+				trg = trg.replaceAll("<".concat(parameter.getPar()).concat(">"), val);
 			}			
 		}		
 		return trg;

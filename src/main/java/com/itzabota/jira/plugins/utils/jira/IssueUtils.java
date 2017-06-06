@@ -17,6 +17,8 @@ import com.atlassian.jira.issue.MutableIssue;
 import com.atlassian.jira.issue.fields.CustomField;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayoutItem;
 import com.atlassian.jira.issue.fields.layout.field.FieldLayoutManager;
+import com.atlassian.jira.issue.history.ChangeItemBean;
+import com.atlassian.jira.issue.history.ChangeLogUtils;
 import com.atlassian.jira.issue.status.SimpleStatus;
 import com.atlassian.jira.issue.status.Status;
 import com.atlassian.jira.issue.util.DefaultIssueChangeHolder;
@@ -37,7 +39,7 @@ public class IssueUtils {
 		CustomFieldManager cFldMng = ComponentAccessor.getCustomFieldManager();
 		List<CustomField> cfldList = cFldMng.getCustomFieldObjects(issue);
 		for (CustomField customField : cfldList) {
-			if (customField.getFieldName().equalsIgnoreCase(fldName)) {
+			if (customField.getUntranslatedName().equalsIgnoreCase(fldName)) {
 				cfld = customField;
 				break;
 			}
@@ -53,6 +55,33 @@ public class IssueUtils {
 				getFieldLayout(issue).getFieldLayoutItem(customField);
 		customField.updateValue(fieldLayoutItem, issue, modifiedValue, new
 				DefaultIssueChangeHolder());		
+	}
+	
+	public static void writeHistoryAssignee (MutableIssue issue,
+			ApplicationUser oldAssignee,
+			ApplicationUser newAssignee			
+			) {
+		DefaultIssueChangeHolder issueChangeHolder = new DefaultIssueChangeHolder();
+		final ModifiedValue<ApplicationUser> modifiedValue = new ModifiedValue<ApplicationUser>(oldAssignee, newAssignee);
+		String oldAssigneeKey = null;
+		String oldAssigneeDisplay = null;
+		String newAssigneeKey = null;
+		String newAssigneeDisplay = null;
+		if (oldAssignee != null) {
+			oldAssigneeKey = modifiedValue.getOldValue().getKey();
+			oldAssigneeDisplay = modifiedValue.getOldValue().getDisplayName(); 
+		}
+		if (newAssignee != null) {
+			newAssigneeKey = modifiedValue.getNewValue().getKey();
+			newAssigneeDisplay = modifiedValue.getNewValue().getDisplayName(); 
+		}		
+		ChangeItemBean changeItemBean = new ChangeItemBean(ChangeItemBean.STATIC_FIELD, "assignee", 
+				oldAssigneeKey,
+				newAssigneeKey);
+		changeItemBean.setFromString(oldAssigneeDisplay);					
+		changeItemBean.setToString(newAssigneeDisplay);
+		issueChangeHolder.addChangeItem(changeItemBean);
+		ChangeLogUtils.createChangeGroup(issue.getReporter(), issue, issue, issueChangeHolder.getChangeItems(), true);		
 	}
 	
 	public static IssueResult transitionIssue (ApplicationUser user, String actionName, MutableIssue issue, IssueInputParameters issueInputParameters) {

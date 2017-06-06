@@ -9,7 +9,13 @@ import com.itzabota.jira.plugins.servye.lsa.db.model.ResTp;
 import com.itzabota.jira.plugins.servye.lsa.db.model.ResTps;
 
 public class TstFunc {
+	
+	
+	
 	public static void main(String[] args) {
+		String retn = "SELECT Q1.ID, Q1.Resource_Type, Q1.ID_Employee, Q1.CD_STR, Q1.NAME, Q1.RESOURCE, Q1.MODUL, Q1.FUNCTION, Q1.COMM, CASE WHEN Q1.STS_H IS NOT NULL THEN Q1.STS_H ELSE Q1.STS END AS STS, Q1.TEMPLATE, Q1.EXPERT, Q1.OWNER, Q1.SPECIALIST, Q1.RESOURCE_EXPERT, Q1.RESOURCE_OWNER, Q1.RESOURCE_SPECIALIST,Q1.MODUL_EXPERT, Q1.MODUL_OWNER, Q1.MODUL_SPECIALIST,Q1.FUNCTION_EXPERT, Q1.FUNCTION_OWNER, Q1.FUNCTION_SPECIALIST FROM ( SELECT 0 AS ID, D1.ResourceType AS Resource_Type, 0 as ID_Employee, D1.Structural_code AS CD_STR, D1.Name as NAME, A1.Name as RESOURCE, A2.Name as MODUL, A3.Name as \"FUNCTION\", null as COMM, 'Новый' as STS, C1.Name AS TEMPLATE, D1.Login_Expert AS EXPERT, CASE WHEN H.ID IS NOT NULL THEN 'Продление' ELSE H.ID END AS STS_H, D1.Login_Owner AS OWNER, D1.Login_Specialist AS SPECIALIST, A1.Login_Expert AS RESOURCE_EXPERT, A1.Login_Owner AS RESOURCE_OWNER, A1.Login_Specialist AS RESOURCE_SPECIALIST, A2.Login_Expert AS MODUL_EXPERT, A2.Login_Owner AS MODUL_OWNER, A2.Login_Specialist AS MODUL_SPECIALIST, A3.Login_Expert AS FUNCTION_EXPERT, A3.Login_Owner AS FUNCTION_OWNER, A3.Login_Specialist AS FUNCTION_SPECIALIST FROM jira_tab_resources D1 LEFT JOIN jira_tab_resources A1 ON SUBSTRING(D1.Structural_code, 1, 10) = SUBSTRING(A1.Structural_code, 1, 10) AND len(A1.Structural_code) = 10 LEFT JOIN jira_tab_resources A2 ON SUBSTRING(D1.Structural_code, 1, 21) = SUBSTRING(A2.Structural_code, 1, 21) AND len(A2.Structural_code) = 21 LEFT JOIN jira_tab_resources A3 ON SUBSTRING(D1.Structural_code, 1, 32) = SUBSTRING(A3.Structural_code, 1, 32) AND len(A3.Structural_code) = 32 INNER JOIN jira_tab_templatecomponent B1 ON B1.ID_Resource = D1.ID INNER JOIN jira_tab_accesstemplate C1 ON B1.ID_template=C1.ID LEFT JOIN jira_tab_accesshistory H ON H.Structural_code=D1.Structural_code AND H.ID_Employee = 2 AND H.Date_end >  GETDATE() ) as Q1 order by 6,7,8";
+		retn = retn.replaceAll("\\.FUNCTION", ".\"FUNCTION\"");
+		System.out.println(retn);
 		TstFunc tstFunc = new TstFunc();
 		ResTp resTp1 = new ResTp();
 		resTp1.setLoginExpertResource("Expert1");

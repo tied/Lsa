@@ -13,9 +13,13 @@
 			},
 			{
 				"par" : "issueTask"
-			}],
+			},
+			{
+				"par" : "SCHEMA_NAME"
+			}			
+			],
 			"dBSchemaName": "dbo",
-			"dBQuery": "select MAIN.ID as ID, MAIN.Structural_code as CD_STR, A1.Name as NAME1, A2.Name as NAME2, A3.Name as NAME3, MAIN.Сomment as COMM, STS.Name as STS FROM jira_tab_resources_issue MAIN INNER JOIN jira_tab_statusaccess STS ON MAIN.ID_Status = STS.ID LEFT JOIN jira_tab_resources A1 ON substring(MAIN.Structural_code, 1, 10) = substring(A1.Structural_code, 1, 10) AND len(A1.Structural_code) = 10 AND A1.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A2 ON substring(MAIN.Structural_code, 1, 21) = substring(A2.Structural_code, 1, 21) AND len(A2.Structural_code) = 21 AND A2.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A3 ON substring(MAIN.Structural_code, 1, 32) = substring(A3.Structural_code, 1, 32) AND len(A3.Structural_code) = 32 AND A3.ResourceType = <ResourceType> WHERE NOT (A1.NAME IS NULL AND A2.NAME IS NULL AND A3.NAME IS NULL)",
+			"dBQuery": "select MAIN.ID as ID, MAIN.Structural_code as CD_STR, A1.Name as NAME1, A2.Name as NAME2, A3.Name as NAME3, MAIN.Сomment as COMM, STS.Name as STS FROM  jira_tab_resources_issue MAIN INNER JOIN jira_tab_statusaccess STS ON MAIN.ID_Status = STS.ID LEFT JOIN jira_tab_resources A1 ON <SCHEMA_NAME>.SPLIT_STR(MAIN.Structural_code, '.', 1) = <SCHEMA_NAME>.SPLIT_STR(A1.Structural_code, '.', 1) AND <SCHEMA_NAME>.SPLIT_STR(A1.Structural_code, '.', 2) = '' AND A1.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A2 ON <SCHEMA_NAME>.SPLIT_STR(MAIN.Structural_code, '.', 1)+'.'+<SCHEMA_NAME>.SPLIT_STR(MAIN.Structural_code, '.', 2) = <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 1)+'.'+<SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 2) AND <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 2) != '' AND <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 3) = '' AND A2.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A3 ON MAIN.Structural_code = A3.Structural_code AND <SCHEMA_NAME>.SPLIT_STR(A3.Structural_code, '.', 2) != '' AND <SCHEMA_NAME>.SPLIT_STR(A3.Structural_code, '.', 3) != '' AND A3.ResourceType = <ResourceType> WHERE NOT (A1.NAME = '' AND A2.NAME = '' AND A3.NAME = '')", 
 			"dBQueryWhereConditions": [
 			{
 				"fldExpr": "issueTask",
@@ -84,9 +88,12 @@
 			},
 			{
 				"par" : "issueTask"
+			},
+			{
+				"par" : "SCHEMA_NAME"
 			}],
 			"dBSchemaName": "dbo",
-			"dBQuery": "select MAIN.ID as ID, MAIN.Structural_code as CD_STR, A1.Name as NAME1, A2.Name as NAME2, A3.Name as NAME3, MAIN.Сomment as COMM, STS.Name as STS FROM jira_tab_resources_issue MAIN INNER JOIN jira_tab_statusaccess STS ON MAIN.ID_Status = STS.ID LEFT JOIN jira_tab_resources A1 ON substring(MAIN.Structural_code, 1, 10) = substring(A1.Structural_code, 1, 10) AND len(A1.Structural_code) = 10 AND A1.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A2 ON substring(MAIN.Structural_code, 1, 21) = substring(A2.Structural_code, 1, 21) AND len(A2.Structural_code) = 21 AND A2.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A3 ON substring(MAIN.Structural_code, 1, 32) = substring(A3.Structural_code, 1, 32) AND len(A3.Structural_code) = 32 AND A3.ResourceType = <ResourceType> WHERE NOT (A1.NAME IS NULL AND A2.NAME IS NULL AND A3.NAME IS NULL)",
+			"dBQuery": "select MAIN.ID as ID, MAIN.Structural_code as CD_STR, A1.Name as NAME1, A2.Name as NAME2, A3.Name as NAME3, MAIN.Сomment as COMM, STS.Name as STS FROM  jira_tab_resources_issue MAIN INNER JOIN jira_tab_statusaccess STS ON MAIN.ID_Status = STS.ID LEFT JOIN jira_tab_resources A1 ON <SCHEMA_NAME>.SPLIT_STR(MAIN.Structural_code, '.', 1) = <SCHEMA_NAME>.SPLIT_STR(A1.Structural_code, '.', 1) AND <SCHEMA_NAME>.SPLIT_STR(A1.Structural_code, '.', 2) = '' AND A1.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A2 ON <SCHEMA_NAME>.SPLIT_STR(MAIN.Structural_code, '.', 1)+'.'+<SCHEMA_NAME>.SPLIT_STR(MAIN.Structural_code, '.', 2) = <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 1)+'.'+<SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 2) AND <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 2) != '' AND <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 3) = '' AND A2.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A3 ON MAIN.Structural_code = A3.Structural_code AND <SCHEMA_NAME>.SPLIT_STR(A3.Structural_code, '.', 2) != '' AND <SCHEMA_NAME>.SPLIT_STR(A3.Structural_code, '.', 3) != '' AND A3.ResourceType = <ResourceType> WHERE NOT (A1.NAME = '' AND A2.NAME = '' AND A3.NAME = '')",
 			"dBQueryWhereConditions": [
 			{
 				"fldExpr": "issueTask",
@@ -155,9 +162,12 @@
 			},
 			{
 				"par" : "issueTask"
+			},
+			{
+				"par" : "SCHEMA_NAME"
 			}],
 			"dBSchemaName": "dbo",
-			"dBQuery": "select MAIN.ID as ID, MAIN.Structural_code as CD_STR, A1.Name as NAME1, A2.Name as NAME2, A3.Name as NAME3, MAIN.Сomment as COMM, STS.Name as STS FROM jira_tab_resources_issue MAIN INNER JOIN jira_tab_statusaccess STS ON MAIN.ID_Status = STS.ID LEFT JOIN jira_tab_resources A1 ON substring(MAIN.Structural_code, 1, 10) = substring(A1.Structural_code, 1, 10) AND len(A1.Structural_code) = 10 AND A1.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A2 ON substring(MAIN.Structural_code, 1, 21) = substring(A2.Structural_code, 1, 21) AND len(A2.Structural_code) = 21 AND A2.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A3 ON substring(MAIN.Structural_code, 1, 32) = substring(A3.Structural_code, 1, 32) AND len(A3.Structural_code) = 32 AND A3.ResourceType = <ResourceType> WHERE NOT (A1.NAME IS NULL AND A2.NAME IS NULL AND A3.NAME IS NULL)",
+			"dBQuery": "select MAIN.ID as ID, MAIN.Structural_code as CD_STR, A1.Name as NAME1, A2.Name as NAME2, A3.Name as NAME3, MAIN.Сomment as COMM, STS.Name as STS FROM  jira_tab_resources_issue MAIN INNER JOIN jira_tab_statusaccess STS ON MAIN.ID_Status = STS.ID LEFT JOIN jira_tab_resources A1 ON <SCHEMA_NAME>.SPLIT_STR(MAIN.Structural_code, '.', 1) = <SCHEMA_NAME>.SPLIT_STR(A1.Structural_code, '.', 1) AND <SCHEMA_NAME>.SPLIT_STR(A1.Structural_code, '.', 2) = '' AND A1.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A2 ON <SCHEMA_NAME>.SPLIT_STR(MAIN.Structural_code, '.', 1)+'.'+<SCHEMA_NAME>.SPLIT_STR(MAIN.Structural_code, '.', 2) = <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 1)+'.'+<SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 2) AND <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 2) != '' AND <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 3) = '' AND A2.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A3 ON MAIN.Structural_code = A3.Structural_code AND <SCHEMA_NAME>.SPLIT_STR(A3.Structural_code, '.', 2) != '' AND <SCHEMA_NAME>.SPLIT_STR(A3.Structural_code, '.', 3) != '' AND A3.ResourceType = <ResourceType> WHERE NOT (A1.NAME = '' AND A2.NAME = '' AND A3.NAME = '')",
 			"dBQueryWhereConditions": [
 			{
 				"fldExpr": "issueTask",
@@ -226,9 +236,12 @@
 			},
 			{
 				"par" : "issueTask"
+			},
+			{
+				"par" : "SCHEMA_NAME"
 			}],
 			"dBSchemaName": "dbo",
-			"dBQuery": "select MAIN.ID as ID, MAIN.Structural_code as CD_STR, A1.Name as NAME1, A2.Name as NAME2, A3.Name as NAME3, MAIN.Сomment as COMM, STS.Name as STS FROM jira_tab_resources_issue MAIN INNER JOIN jira_tab_statusaccess STS ON MAIN.ID_Status = STS.ID LEFT JOIN jira_tab_resources A1 ON substring(MAIN.Structural_code, 1, 10) = substring(A1.Structural_code, 1, 10) AND len(A1.Structural_code) = 10 AND A1.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A2 ON substring(MAIN.Structural_code, 1, 21) = substring(A2.Structural_code, 1, 21) AND len(A2.Structural_code) = 21 AND A2.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A3 ON substring(MAIN.Structural_code, 1, 32) = substring(A3.Structural_code, 1, 32) AND len(A3.Structural_code) = 32 AND A3.ResourceType = <ResourceType> WHERE NOT (A1.NAME IS NULL AND A2.NAME IS NULL AND A3.NAME IS NULL)",
+			"dBQuery": "select MAIN.ID as ID, MAIN.Structural_code as CD_STR, A1.Name as NAME1, A2.Name as NAME2, A3.Name as NAME3, MAIN.Сomment as COMM, STS.Name as STS FROM  jira_tab_resources_issue MAIN INNER JOIN jira_tab_statusaccess STS ON MAIN.ID_Status = STS.ID LEFT JOIN jira_tab_resources A1 ON <SCHEMA_NAME>.SPLIT_STR(MAIN.Structural_code, '.', 1) = <SCHEMA_NAME>.SPLIT_STR(A1.Structural_code, '.', 1) AND <SCHEMA_NAME>.SPLIT_STR(A1.Structural_code, '.', 2) = '' AND A1.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A2 ON <SCHEMA_NAME>.SPLIT_STR(MAIN.Structural_code, '.', 1)+'.'+<SCHEMA_NAME>.SPLIT_STR(MAIN.Structural_code, '.', 2) = <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 1)+'.'+<SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 2) AND <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 2) != '' AND <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 3) = '' AND A2.ResourceType = <ResourceType> LEFT JOIN jira_tab_resources A3 ON MAIN.Structural_code = A3.Structural_code AND <SCHEMA_NAME>.SPLIT_STR(A3.Structural_code, '.', 2) != '' AND <SCHEMA_NAME>.SPLIT_STR(A3.Structural_code, '.', 3) != '' AND A3.ResourceType = <ResourceType> WHERE NOT (A1.NAME = '' AND A2.NAME = '' AND A3.NAME = '')",
 			"dBQueryWhereConditions": [
 			{
 				"fldExpr": "issueTask",

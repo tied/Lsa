@@ -53,7 +53,7 @@ public class AccessHistoryDAOImpl implements TblDAO<AccessHistory> {
 	
 	public List<AccessHistory> getAllByByEmployeeCdStr(EntityManager em, Employee employeeObj, String cdStr) {
 	  Long emplId = employeeObj.getId();
-	  Query allQuery = em.createNativeQuery("SELECT a.* from jira_tab_accesshistory a WHERE a.Structural_code=?1 AND a.ID_Employee=?2 ", AccessHistory.class);
+	  Query allQuery = em.createNativeQuery("SELECT a.* from jira_tab_accesshistory a WHERE a.Structural_code=?1 AND a.ID_Employee=?2 ORDER BY Date_end DESC", AccessHistory.class);
         return allQuery.setParameter(1, cdStr).setParameter(2, emplId).getResultList();
 	}	
 

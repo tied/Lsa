@@ -5,8 +5,13 @@ import java.util.Calendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.atlassian.jira.issue.MutableIssue;
+import com.atlassian.jira.issue.fields.CustomField;
+import com.atlassian.jira.user.ApplicationUser;
 import com.itzabota.jira.plugins.servye.customfield.cfldextdbgrid.config.ConfigImpl;
 import com.itzabota.jira.plugins.servye.lsa.db.config.DBConfigOpenJPA;
+import com.itzabota.jira.plugins.utils.constant.LsaConstant;
+import com.itzabota.jira.plugins.utils.jira.IssueUtils;
 
 public class LsaUtils {
 	private static final Logger log = LoggerFactory.getLogger(LsaUtils.class);
@@ -50,5 +55,33 @@ public class LsaUtils {
 		}
 		return retn;
 	}	
+	
+	public static String SQLCurDateParseDateValue () {
+		String retn = "";
+		if (ConfigImpl.ConnectionDriverNameApp.equalsIgnoreCase(DBConfigOpenJPA.MsSQLServerDriverName)) {
+			retn = " GETDATE() ";
+		}
+		if (ConfigImpl.ConnectionDriverNameApp.equalsIgnoreCase(DBConfigOpenJPA.MySQLDriverName)) {
+			retn = " current_date ";
+		}
+		return retn;
+	}	
+	
+	public static ApplicationUser getRecipient(MutableIssue issue) {
+		ApplicationUser userFio = null;
+		CustomField cfldFio = IssueUtils.getCfldByIssueAndCfldName(issue, LsaConstant.LSA_ISSUE_CFLD_FIO);
+		if (cfldFio != null && cfldFio.getValue(issue) != null) {
+			userFio = (ApplicationUser)cfldFio.getValue(issue);
+		}
+		else {
+			if (issue.isSubTask()) {
+				userFio = issue.getParentObject().getReporter();
+			}
+			else {
+				userFio = issue.getReporter();
+			}
+		}
+		return userFio;
+	}
 	
 }

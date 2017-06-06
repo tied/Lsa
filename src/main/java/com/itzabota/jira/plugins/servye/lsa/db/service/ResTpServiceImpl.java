@@ -43,7 +43,6 @@ import com.itzabota.jira.plugins.servye.lsa.db.dao.EmployeeDAOImpl;
 import com.itzabota.jira.plugins.servye.lsa.db.dao.ResourceIssueDAOImpl;
 import com.itzabota.jira.plugins.servye.lsa.db.model.AccessHistory;
 import com.itzabota.jira.plugins.servye.lsa.db.model.AccessStatus;
-import com.itzabota.jira.plugins.servye.lsa.db.model.CdStrEmplId;
 import com.itzabota.jira.plugins.servye.lsa.db.model.Employee;
 import com.itzabota.jira.plugins.servye.lsa.db.model.ResGrByAutho;
 import com.itzabota.jira.plugins.servye.lsa.db.model.ResGrByAuthos;
@@ -86,12 +85,18 @@ public class ResTpServiceImpl {
 		 + "A3.Login_Expert AS FUNCTION_EXPERT, A3.Login_Owner AS FUNCTION_OWNER, "
 		 + "A3.Login_Specialist AS FUNCTION_SPECIALIST " +
 "FROM jira_tab_resources_issue MAIN INNER JOIN jira_tab_statusaccess STS ON MAIN.ID_Status = STS.ID "+
-"LEFT JOIN jira_tab_resources A1 ON SUBSTRING(MAIN.Structural_code, 1, 10) = SUBSTRING(A1.Structural_code, 1, 10) "+
-"AND len(A1.Structural_code) = 10 LEFT JOIN jira_tab_resources A2 "+
-"ON SUBSTRING(MAIN.Structural_code, 1, 21) = SUBSTRING(A2.Structural_code, 1, 21) "+
-"AND len(A2.Structural_code) = 21 LEFT JOIN jira_tab_resources A3 "+
-"ON SUBSTRING(MAIN.Structural_code, 1, 32) = SUBSTRING(A3.Structural_code, 1, 32) "+
-"AND len(A3.Structural_code) = 32 INNER JOIN jira_tab_resources D1 "+
+"LEFT JOIN jira_tab_resources A1 "
++ "ON <SCHEMA_NAME>.SPLIT_STR(MAIN.Structural_code, '.', 1) = <SCHEMA_NAME>.SPLIT_STR(A1.Structural_code, '.', 1) "
++ "AND <SCHEMA_NAME>.SPLIT_STR(A1.Structural_code, '.', 2) = '' "
++ "LEFT JOIN jira_tab_resources A2 "
++ "ON <SCHEMA_NAME>.SPLIT_STR(MAIN.Structural_code, '.', 1)+'.'+<SCHEMA_NAME>.SPLIT_STR(MAIN.Structural_code, '.', 2) = <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 1)+'.'+<SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 2) "
++ "AND <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 2) != '' "
++ "AND <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 3) = '' "
++ "LEFT JOIN jira_tab_resources A3 "
++ "ON MAIN.Structural_code = A3.Structural_code "
++ "AND <SCHEMA_NAME>.SPLIT_STR(A3.Structural_code, '.', 2) != '' "
++ "AND <SCHEMA_NAME>.SPLIT_STR(A3.Structural_code, '.', 3) != '' "
++ "INNER JOIN jira_tab_resources D1 "+
 "ON MAIN.Structural_code=D1.Structural_code "+
 "LEFT JOIN jira_tab_templatecomponent B1 ON B1.ID_Resource = D1.ID "+
 "LEFT JOIN jira_tab_accesstemplate C1 ON B1.ID_template=C1.ID "+
@@ -105,48 +110,60 @@ public class ResTpServiceImpl {
 + "A3.Login_Specialist AS FUNCTION_SPECIALIST "
 + "FROM jira_tab_resources_issue MAIN "
 + "LEFT JOIN jira_tab_resources A1 "
-+ "ON SUBSTRING(MAIN.Structural_code, 1, 10) = SUBSTRING(A1.Structural_code, 1, 10) "
-+ "AND len(A1.Structural_code) = 10 LEFT JOIN jira_tab_resources A2 "
-+ "ON SUBSTRING(MAIN.Structural_code, 1, 21) = SUBSTRING(A2.Structural_code, 1, 21) "
-+ "AND len(A2.Structural_code) = 21 LEFT JOIN jira_tab_resources A3 "
-+ "ON SUBSTRING(MAIN.Structural_code, 1, 32) = SUBSTRING(A3.Structural_code, 1, 32) "
-+ "AND len(A3.Structural_code) = 32 "
++ "ON <SCHEMA_NAME>.SPLIT_STR(MAIN.Structural_code, '.', 1) = <SCHEMA_NAME>.SPLIT_STR(A1.Structural_code, '.', 1) "
++ "AND <SCHEMA_NAME>.SPLIT_STR(A1.Structural_code, '.', 2) = '' "
++ "LEFT JOIN jira_tab_resources A2 "
++ "ON <SCHEMA_NAME>.SPLIT_STR(MAIN.Structural_code, '.', 1)+'.'+<SCHEMA_NAME>.SPLIT_STR(MAIN.Structural_code, '.', 2) = <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 1)+'.'+<SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 2) "
++ "AND <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 2) != '' "
++ "AND <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 3) = '' "
++ "LEFT JOIN jira_tab_resources A3 "
++ "ON MAIN.Structural_code = A3.Structural_code "
++ "AND <SCHEMA_NAME>.SPLIT_STR(A3.Structural_code, '.', 2) != '' "
++ "AND <SCHEMA_NAME>.SPLIT_STR(A3.Structural_code, '.', 3) != '' "
 + "where MAIN.ID_Issue = '<issueKey>' "
 + "group by A1.Login_Expert, A1.Login_Owner, A1.Login_Specialist,"
 + "A2.Login_Expert, A2.Login_Owner, A2.Login_Specialist,"
 + "A3.Login_Expert, A3.Login_Owner, A3.Login_Specialist";
 	
 	
-	private static final String sqlQueryTemplate = "SELECT Q1.* FROM ( "
+	private static final String sqlQueryTemplate = "SELECT "
+			+ "Q1.ID, Q1.Resource_Type, Q1.ID_Employee, Q1.CD_STR, Q1.NAME, Q1.RESOURCE, "
+			+ "Q1.MODUL, Q1.\"FUNCTION\", Q1.COMM, "
+			+ "CASE WHEN Q1.STS_H IS NOT NULL THEN Q1.STS_H ELSE Q1.STS END AS STS, "
+			+ "Q1.TEMPLATE, Q1.EXPERT, Q1.OWNER, Q1.SPECIALIST, "
+			+ "Q1.RESOURCE_EXPERT, Q1.RESOURCE_OWNER, Q1.RESOURCE_SPECIALIST,"
+			+ "Q1.MODUL_EXPERT, Q1.MODUL_OWNER, Q1.MODUL_SPECIALIST,"
+			+ "Q1.FUNCTION_EXPERT, Q1.FUNCTION_OWNER, Q1.FUNCTION_SPECIALIST FROM ( "
 			+ "SELECT 0 AS ID, D1.ResourceType AS Resource_Type, 0 as ID_Employee, D1.Structural_code AS CD_STR, D1.Name as NAME, A1.Name as RESOURCE, A2.Name as MODUL, "+
- "A3.Name as \"FUNCTION\", null as COMM, '"+LsaConstant.LSA_ISSUE_STATUS_DEFAULT+"' as STS, C1.Name AS TEMPLATE, D1.Login_Expert AS EXPERT, "+
+ "A3.Name as \"FUNCTION\", null as COMM, '"+LsaConstant.LSA_ISSUE_STATUS_DEFAULT+"' as STS"
+ 		+ ", C1.Name AS TEMPLATE, D1.Login_Expert AS EXPERT, "+
+ "CASE WHEN H.ID IS NOT NULL THEN '" + LsaConstant.LSA_ISSUE_STATUS_CONTINUE + "' ELSE H.Name END AS STS_H, " +
  "D1.Login_Owner AS OWNER, D1.Login_Specialist AS SPECIALIST, "+
  "A1.Login_Expert AS RESOURCE_EXPERT, A1.Login_Owner AS RESOURCE_OWNER, "
 		 + "A1.Login_Specialist AS RESOURCE_SPECIALIST, A2.Login_Expert AS MODUL_EXPERT, "
 		 + "A2.Login_Owner AS MODUL_OWNER, A2.Login_Specialist AS MODUL_SPECIALIST, "
 		 + "A3.Login_Expert AS FUNCTION_EXPERT, A3.Login_Owner AS FUNCTION_OWNER, "
 		 + "A3.Login_Specialist AS FUNCTION_SPECIALIST " +		 
-"FROM jira_tab_resources D1 "+
-"LEFT JOIN jira_tab_resources A1 ON SUBSTRING(D1.Structural_code, 1, 10) = SUBSTRING(A1.Structural_code, 1, 10) "+
-"AND len(A1.Structural_code) = 10 LEFT JOIN jira_tab_resources A2 "+
-"ON SUBSTRING(D1.Structural_code, 1, 21) = SUBSTRING(A2.Structural_code, 1, 21) "+
-"AND len(A2.Structural_code) = 21 LEFT JOIN jira_tab_resources A3 "+
-"ON SUBSTRING(D1.Structural_code, 1, 32) = SUBSTRING(A3.Structural_code, 1, 32) "+
-"AND len(A3.Structural_code) = 32 "+
-"INNER JOIN jira_tab_templatecomponent B1 ON B1.ID_Resource = D1.ID "+
+"FROM jira_tab_resources D1 "
++ "LEFT JOIN jira_tab_resources A1 "
++ "ON <SCHEMA_NAME>.SPLIT_STR(D1.Structural_code, '.', 1) = <SCHEMA_NAME>.SPLIT_STR(A1.Structural_code, '.', 1) "
++ "AND <SCHEMA_NAME>.SPLIT_STR(A1.Structural_code, '.', 2) = '' "
++ "LEFT JOIN jira_tab_resources A2 "
++ "ON <SCHEMA_NAME>.SPLIT_STR(D1.Structural_code, '.', 1)+'.'+<SCHEMA_NAME>.SPLIT_STR(D1.Structural_code, '.', 2) = <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 1)+'.'+<SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 2) "
++ "AND <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 2) != '' "
++ "AND <SCHEMA_NAME>.SPLIT_STR(A2.Structural_code, '.', 3) = '' "
++ "LEFT JOIN jira_tab_resources A3 "
++ "ON D1.Structural_code = A3.Structural_code "
++ "AND <SCHEMA_NAME>.SPLIT_STR(A3.Structural_code, '.', 2) != '' "
++ "AND <SCHEMA_NAME>.SPLIT_STR(A3.Structural_code, '.', 3) != '' "
++ "INNER JOIN jira_tab_templatecomponent B1 ON B1.ID_Resource = D1.ID "+
 "INNER JOIN jira_tab_accesstemplate C1 ON B1.ID_template=C1.ID "+
-") AS Q1 LEFT JOIN ("
-+ "SELECT A01.Structural_code AS CD_STR "
-+ "FROM jira_tab_resources A01 "
-+ "INNER JOIN jira_tab_accesshistory H "
-+ "ON H.Structural_code=A01.Structural_code "
+"LEFT JOIN jira_tab_accesshistory H "
++ "ON H.Structural_code=D1.Structural_code "
 + "AND H.ID_Employee = <ID_Employee> "
 + "AND H.Date_end > "
-+ LsaUtils.SQLAddDateParseDateValue(LsaConstant.LSA_RESOURCECONTINUE_INTERVAL)
-+ " ) AS Q2 "
-+ "ON Q1.CD_STR = Q2.CD_STR "
-+ "WHERE Q2.CD_STR IS NULL "
-+ " order by 6,7,8";
++ LsaUtils.SQLCurDateParseDateValue()
++ ") as Q1 order by 6,7,8";
 		
 	private final LsaConstant lsaConstant = new LsaConstant();
 	
@@ -172,15 +189,8 @@ public class ResTpServiceImpl {
 	public ResTpsPacket getPacket(String issueKey) {
 		IssueManager issueManager = ComponentAccessor.getIssueManager();
 		MutableIssue issue = issueManager.getIssueObject(issueKey);		
-		ApplicationUser appUser = null;
-		if (issue.isSubTask()) {
-			appUser = issue.getParentObject().getReporter();
-		}
-		else {
-			appUser = issue.getReporter();
-		}	
-		Employee employee = null;
-		
+		ApplicationUser appUser = LsaUtils.getRecipient(issue);
+		Employee employee = null;		
 		if (appUser != null) {
 			em = this.config.getDBConfigOrm().getFactory().createEntityManager();
 			employee = employeeDAOImpl.getByLogin(em, appUser.getUsername());
@@ -219,13 +229,7 @@ public class ResTpServiceImpl {
 	private ResTps getAllBase(String issueKey, String sql0) {	
 		IssueManager issueManager = ComponentAccessor.getIssueManager();
 		MutableIssue issue = issueManager.getIssueObject(issueKey);
-		ApplicationUser appUser = null;
-		if (issue.isSubTask()) {
-			appUser = issue.getParentObject().getReporter();
-		}
-		else {
-			appUser = issue.getReporter();
-		}	
+		ApplicationUser appUser = LsaUtils.getRecipient(issue);	
 		Employee employee = null;
 		if (appUser != null) {
 			employee = employeeServiceImpl.getByLogin(appUser.getUsername());
@@ -239,6 +243,7 @@ public class ResTpServiceImpl {
 				) {
 			String sql = sql0.replaceAll("<".concat("issueKey").concat(">"), issueKey);
 			sql = sql.replaceAll("<".concat("ID_Employee").concat(">"), String.valueOf(employee.getId()));
+			sql = sql.replaceAll("<".concat("SCHEMA_NAME").concat(">"), config.getMappingDbJiraFld().getMappingDbJiraFld().get(0).getdBSchemaName());			
 			log.info(ConfigImpl.modiSqlOnDriverName(sql));
 			rs = stmt.executeQuery(ConfigImpl.modiSqlOnDriverName(sql));
 			List<List<Object>> listObj = DBUtils.getSqlRez(rs);
@@ -362,9 +367,12 @@ public class ResTpServiceImpl {
 		
 		
 		ApplicationUser assigneeMng = ComponentAccessor.getUserManager().getUserByName(LsaConstant.LSA_USER_MANAGER_DEFAULT);
+		CustomField cfldFio = IssueUtils.getCfldByIssueAndCfldName(issue, LsaConstant.LSA_ISSUE_CFLD_FIO);
+		ApplicationUser userFio = LsaUtils.getRecipient(issue);
+		 
 		for (ResTps resTps : resTpsList) {
 			String summaryBase = LsaConstant.LSA_SUBTASK_SUMMARY_TEMPLATE.replaceAll("\\{".concat(LsaConstant.issueSummaryFio).concat("\\}"), 
-					issue.getReporter().getDisplayName());
+					userFio.getDisplayName());
 			IssueInputParameters issueInputParameters = new
 					IssueInputParametersImpl();
 			issueInputParameters.
@@ -450,6 +458,7 @@ public class ResTpServiceImpl {
 				continue;
 			}			
 			MutableIssue createdIssue = createResult.getIssue();
+			IssueUtils.saveValue(cfldFio, createdIssue, null, userFio);
 			// Исполнитель
 			
 			if (assigneeId != null) {
@@ -644,6 +653,7 @@ public class ResTpServiceImpl {
 				Statement stmt = conn.createStatement();
 				) {
 			String sql = sql0.replaceAll("<".concat("issueKey").concat(">"), issueKey);
+			sql = sql.replaceAll("<".concat("SCHEMA_NAME").concat(">"), config.getMappingDbJiraFld().getMappingDbJiraFld().get(0).getdBSchemaName());
 //			log.info(ConfigImpl.modiSqlOnDriverName(sql));
 			rs = stmt.executeQuery(ConfigImpl.modiSqlOnDriverName(sql));
 			List<List<Object>> listObj = DBUtils.getSqlRez(rs);
@@ -698,7 +708,8 @@ public class ResTpServiceImpl {
 			assignee = ComponentAccessor.getUserManager().getUserByName(LsaConstant.LSA_USER_MANAGER_DEFAULT);
 		}
 		else {
-			assignee = ComponentAccessor.getUserManager().getUserByName(employee.getLoginMng());
+			// В нижнем регистре!
+			assignee = ComponentAccessor.getUserManager().getUserByName(employee.getLoginMng().toLowerCase());
 		}
 		assigneeId = assignee.getKey();
 		return assigneeId;
@@ -719,46 +730,46 @@ public class ResTpServiceImpl {
 					val);			
 		}
 		retn = retn.replaceAll("\\{".concat(LsaConstant.issueSummaryFio).concat("\\}"), 
-				issue.getReporter().getDisplayName());
+				 LsaUtils.getRecipient(issue).getDisplayName());
 		return retn;
 	}
 	
 	public ResStatus searchAccessHistoryResourceExist (String cdStr, Employee employee) {
 		ResStatus resStatus = new ResStatus();
-		resStatus.setCanApproveResource(true);
-		String validStatus = LsaConstant.LSA_ISSUE_STATUS_NEW;
+		resStatus.setCanApproveResource(false);
+		String validStatus = null;
 		String tsEndResStr = "";		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		Date newDate = cal.getTime();			
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		boolean isValid = true;
 		// Поиск существующих доступов
 		List<AccessHistory> accessHistoryList = accessHistoryServiceImpl.getAllByByEmployeeCdStr(employee, cdStr);
 		if (accessHistoryList != null && accessHistoryList.size() > 0) {
 			for (AccessHistory accessHistory0 : accessHistoryList) {
 				AccessHistory accessHistory = accessHistoryServiceImpl.getById(accessHistory0.getId());
-				if (accessHistory.getAccessStatus().getName().equalsIgnoreCase(LsaConstant.LSA_ISSUE_STATUS_SUCCEED)) {
-					Date cfldResDtEndValue = new Date(accessHistory.getTsEnd().getTime());								
+				validStatus = accessHistory.getAccessStatus().getName();
+				tsEndResStr = df.format(new Date(accessHistory.getTsEnd().getTime()));
+				resStatus.setTsEndStr(tsEndResStr);
+				Date cfldResDtEndValue = new Date(accessHistory.getTsEnd().getTime());
+				if (newDate.before(cfldResDtEndValue)) {
+					resStatus.setCanApproveResource(true);
+				}				
+				if (accessHistory.getAccessStatus().getName().equalsIgnoreCase(LsaConstant.LSA_ISSUE_STATUS_SUCCEED)) {													
 					if (cfldResDtEndValue!= null ) {
-						Calendar cal = Calendar.getInstance();
-						cal.setTime(new Date());
-						Calendar calEnd = LsaUtils.AddDateParseDateValue(cal, LsaConstant.LSA_RESOURCECONTINUE_INTERVAL);
-						Date newDate = calEnd.getTime();	
-						if (newDate.after(cfldResDtEndValue)) {
-							String statusVal = LsaConstant.LSA_ISSUE_STATUS_CONTINUE;
-							validStatus = statusVal;
-						}
-						else {
-							isValid = false;
-							resStatus.setCanApproveResource(isValid);
-							validStatus = accessHistory.getAccessStatus().getName();
-							DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-							tsEndResStr = df.format(new Date(accessHistory.getTsEnd().getTime()));
-							resStatus.setTsEndStr(tsEndResStr);
-						}
-						resStatus.setStatusName(validStatus);						
+						if (newDate.before(cfldResDtEndValue)) {
+							validStatus = LsaConstant.LSA_ISSUE_STATUS_CONTINUE;
+						}												
 						break;	
 					}
-				}					
+				}				
 			}
 		}
+		if (validStatus == null) {
+			validStatus = LsaConstant.LSA_ISSUE_STATUS_NEW;
+		}
+		resStatus.setStatusName(validStatus);
 		return resStatus;
 	}
 	
@@ -769,13 +780,7 @@ public class ResTpServiceImpl {
 		String issueKey = resStatus.getIssueKey();
 		IssueManager issueManager = ComponentAccessor.getIssueManager();
 		MutableIssue issue = issueManager.getIssueObject(issueKey);
-		ApplicationUser appUser = null;
-		if (issue.isSubTask()) {
-			appUser = issue.getParentObject().getReporter();
-		}
-		else {
-			appUser = issue.getReporter();
-		}	
+		ApplicationUser appUser =  LsaUtils.getRecipient(issue);
 		Employee employee = null;
 		if (appUser != null) {
 			employee = employeeServiceImpl.getById(resStatus.getEmployeeId());
@@ -821,13 +826,7 @@ public class ResTpServiceImpl {
 		List<ResTp> resTps = resTpsPacket.getResTps();
 		IssueManager issueManager = ComponentAccessor.getIssueManager();
 		MutableIssue issue = issueManager.getIssueObject(issueKey);
-		ApplicationUser appUser = null;
-		if (issue.isSubTask()) {
-			appUser = issue.getParentObject().getReporter();
-		}
-		else {
-			appUser = issue.getReporter();
-		}			
+		ApplicationUser appUser =  LsaUtils.getRecipient(issue);		
 		Employee employee = null;
 		EntityTransaction trans = em.getTransaction();
 		trans.begin();
